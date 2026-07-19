@@ -51,7 +51,36 @@ public/videos/hero.mp4  The uploaded talking-head video (used twice: sharp
 - Colors and easing curves are centralized as CSS variables in
   `app/globals.css` — change them once, everything updates.
 
-## Notes on the implementation
+## Push to GitHub
+
+This folder already has a local git repo with one commit (`git log` shows it).
+To publish it:
+
+1. Create an empty repository on GitHub (no README/license, so it's truly empty) — e.g. `cinematic-portfolio-hero`.
+2. In this project folder, run:
+
+```bash
+git remote add origin https://github.com/<your-username>/<your-repo>.git
+git push -u origin main
+```
+
+That's it — `git init`, the first commit, and the `main` branch are already done for you.
+
+## Deploy so anyone, anywhere can open it
+
+The easiest path for a Next.js app is **Vercel** (made by the Next.js team, free tier is enough for a portfolio):
+
+1. Go to https://vercel.com and sign in with your GitHub account.
+2. Click **Add New → Project**, then select the repo you just pushed.
+3. Leave the defaults (Vercel auto-detects Next.js) and click **Deploy**.
+4. In a minute or two you'll get a live URL like `https://cinematic-portfolio-hero.vercel.app` that works for anyone, on any device, anywhere — no server to manage.
+
+Every time you `git push` after that, Vercel automatically redeploys the update.
+
+**Alternative:** Netlify works the same way (netlify.com → "Import from Git" → pick the repo → deploy) if you'd rather use that instead.
+
+> One thing to double check before deploying: `public/videos/hero.mp4` is ~2.5MB, which is fine for a hosted static asset — no special configuration needed, it deploys along with everything else.
+
 
 - The **frame** (foreground video) sits inset from the viewport edges with
   rounded corners; the **ambient** layer is the same video, scaled up and
