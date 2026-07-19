@@ -242,24 +242,51 @@
 
 .linkRow {
   display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.iconLink {
+  display: flex;
   flex-direction: column;
-  gap: 0.6rem;
-  align-items: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-muted);
+  transition: color 0.3s var(--ease-soft);
 }
 
-.githubLink {
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
+.iconLink:hover {
   color: var(--text-warm);
-  border-bottom: 1px solid var(--accent-amber);
-  padding-bottom: 2px;
-  white-space: nowrap;
-  transition: color 0.3s var(--ease-soft), border-color 0.3s var(--ease-soft);
 }
 
-.githubLink:hover {
-  color: var(--accent-amber);
-  border-color: transparent;
+.iconCircle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(255, 244, 232, 0.06);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(255, 244, 232, 0.18);
+  color: var(--text-warm);
+  transition: transform 0.35s var(--ease-soft), background 0.35s var(--ease-soft),
+    border-color 0.35s var(--ease-soft), box-shadow 0.35s var(--ease-soft);
+}
+
+.iconLink:hover .iconCircle {
+  transform: translateY(-4px) scale(1.06);
+  background: rgba(255, 138, 61, 0.16);
+  border-color: rgba(255, 138, 61, 0.5);
+  box-shadow: 0 12px 32px rgba(255, 138, 61, 0.22);
+}
+
+.iconLabel {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 @media (max-width: 900px) {
