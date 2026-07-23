@@ -105,9 +105,6 @@ const LINKS = [
 export default function Projects() {
   const sectionRef = useRef<HTMLElement>(null);
 
-  // Gentle scroll-reveal: the featured card and each project card fade and
-  // rise into place as they enter the viewport. Purely additive — it does
-  // not touch the hero, the video, or any existing interaction.
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
@@ -168,6 +165,7 @@ export default function Projects() {
               </span>
             ))}
           </div>
+
           <a
             href={FEATURED.demoUrl}
             target="_blank"
