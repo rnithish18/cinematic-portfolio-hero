@@ -1,4 +1,13 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./Projects.module.css";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 type Project = {
   title: string;
@@ -7,7 +16,8 @@ type Project = {
 };
 
 const FEATURED = {
-  eyebrow: "Flagship Project",
+  eyebrow: "Mini Project",
+  meta: "B.E. Computer Science & Engineering — V.S.B. Engineering College",
   title: "AI-Powered Personal Farming Assistant",
   tagline:
     "A voice-enabled, multilingual agricultural advisory platform for Indian farmers.",
@@ -24,11 +34,15 @@ const FEATURED = {
   highlights: [
     "15 farmer-facing modules — conversational chat, vision-based crop diagnosis, weather & 7-day forecast, market prices, soil & pest advisory, expense tracking, community Q&A, and more.",
     "Vision-based Crop Diagnosis: a photographed leaf is sent to a vision-capable LLaMA model, which returns a probable cause and a recommended course of action.",
+    "Genuine bilingual support — English and Tamil use separate, language-specific prompts rather than machine-translated output, across nearly every module.",
     "Three-tier auth — verified email (OTP + bcrypt), guest, and fully anonymous — to minimize onboarding friction while preserving history for farmers who want it.",
+    "Diagnosed and fixed a production issue where Render's free tier blocked outbound SMTP; switched OTP and notification email to Brevo's HTTPS REST API to resolve it without a paid tier.",
+    "Fixed broken Tamil text in exported PDF reports by rendering activity history to HTML and rasterizing it with html2canvas, rather than relying on jsPDF's Tamil-incompatible built-in font.",
     "Self-service, cascading account deletion and an owner-facing audit trail across registration, login, and deletion events.",
     "Community Q&A that routes a question to peers or the AI assistant, with automatic email broadcast to registered users.",
     "Deployed on Render with GitHub-triggered continuous deployment.",
   ],
+  demoUrl: "https://farming-assistant-fxvg.onrender.com/static/index.html",
 };
 
 const PROJECTS: Project[] = [
@@ -89,15 +103,54 @@ const LINKS = [
 ];
 
 export default function Projects() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Gentle scroll-reveal: the featured card and each project card fade and
+  // rise into place as they enter the viewport. Purely additive — it does
+  // not touch the hero, the video, or any existing interaction.
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const ctx = gsap.context(() => {
+      gsap.from(`.${styles.featured}`, {
+        opacity: 0,
+        y: 50,
+        duration: 0.9,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: `.${styles.featured}`,
+          start: "top 85%",
+          toggleActions: "play none none reverse",
+        },
+      });
+
+      gsap.from(`.${styles.card}`, {
+        opacity: 0,
+        y: 40,
+        duration: 0.8,
+        ease: "power3.out",
+        stagger: 0.15,
+        scrollTrigger: {
+          trigger: `.${styles.grid}`,
+          start: "top 85%",
+          toggleActions: "play none none reverse",
+        },
+      });
+    }, section);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="next-section" className={styles.projects}>
+    <section id="next-section" ref={sectionRef} className={styles.projects}>
       <div className={styles.header}>
         <span className={styles.eyebrow}>Selected Work</span>
         <h2 className={styles.heading}>Things I&apos;ve shipped.</h2>
         <p className={styles.intro}>
-          A flagship AI platform, a full-stack optimization tool, an
-          ML-backed chatbot, and a tourism app — each one built to solve a
-          real, specific problem rather than to check a box.
+          A voice-enabled AI farming platform, a full-stack optimization
+          tool, an ML-backed chatbot, and a tourism app — each one built to
+          solve a real, specific problem rather than to check a box.
         </p>
       </div>
 
@@ -105,6 +158,7 @@ export default function Projects() {
         <div className={styles.featuredMain}>
           <span className={styles.featuredEyebrow}>{FEATURED.eyebrow}</span>
           <h3 className={styles.featuredTitle}>{FEATURED.title}</h3>
+          <p className={styles.featuredMeta}>{FEATURED.meta}</p>
           <p className={styles.featuredTagline}>{FEATURED.tagline}</p>
           <p className={styles.featuredDescription}>{FEATURED.description}</p>
           <div className={styles.stackRow}>
@@ -114,6 +168,14 @@ export default function Projects() {
               </span>
             ))}
           </div>
+          <a
+            href={FEATURED.demoUrl}
+            target="_blank"
+            rel="noreferrer"
+            className={styles.demoLink}
+          >
+            View Live Demo ↗
+          </a>
         </div>
         <ul className={styles.featuredHighlights}>
           {FEATURED.highlights.map((point) => (

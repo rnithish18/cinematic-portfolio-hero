@@ -81,6 +81,18 @@ Every time you `git push` after that, Vercel automatically redeploys the update.
 
 > One thing to double check before deploying: `public/videos/hero.mp4` is ~2.5MB, which is fine for a hosted static asset — no special configuration needed, it deploys along with everything else.
 
+## SEO setup
+
+The site ships with real SEO plumbing:
+
+- **Metadata** — title template, description, keywords, canonical URL, Open Graph, and Twitter card, all defined in `app/layout.tsx`.
+- **Structured data (JSON-LD)** — a `Person`, `WebSite`, and `CreativeWork` (the farming assistant) graph, injected in `app/layout.tsx`, so Google and AI search tools can understand who you are and what you've built.
+- **Sitemap + robots.txt** — auto-generated on every build via `next-sitemap` (see `next-sitemap.config.js`). Running `npm run build` regenerates `public/sitemap.xml` and `public/robots.txt` automatically (that's why they're gitignored — no need to commit generated files).
+
+**One thing to fix once you know your real deployed URL:** open `lib/site.ts` and replace the placeholder `SITE_URL` with your actual Vercel domain (e.g. `https://your-project.vercel.app`), then also update `siteUrl` in `next-sitemap.config.js` to match. This one value drives your canonical link, Open Graph previews, and sitemap.
+
+After deploying, submit `https://your-domain/sitemap.xml` to Google Search Console to get indexed faster.
+
 
 - The **frame** (foreground video) sits inset from the viewport edges with
   rounded corners; the **ambient** layer is the same video, scaled up and
