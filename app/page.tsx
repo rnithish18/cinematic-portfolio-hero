@@ -1,11 +1,1 @@
-import VideoIntro from "@/components/VideoIntro";
-import Projects from "@/components/Projects";
-
-export default function Home() {
-  return (
-    <main>
-      <VideoIntro />
-      <Projects />
-    </main>
-  );
-}
+import Navbar from "@/components/Navbar"; import ProjectsShowcase from "@/components/ProjectsShowcase"; import CertificationsSection from "@/components/CertificationsSection"; export default function Home() { return ( <main style={{ minHeight: "100vh", backgroundColor: "#090a0d" }}> <Navbar /> <div style={{ paddingTop: "80px" }}> <ProjectsShowcase /> <CertificationsSection /> </div> </main> ); }
