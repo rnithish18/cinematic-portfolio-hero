@@ -1,12 +1,12 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import gsap from "gsap";
 import CinematicLayer from "./CinematicLayer";
 import styles from "./VideoIntro.module.css";
 
 export default function VideoIntro({
-  videoSrc = "/videos/hero.mp4",
+  videoSrc = "/hero-video.mp4",
   nextSectionId = "projects",
 }: {
   videoSrc?: string;
@@ -20,9 +20,14 @@ export default function VideoIntro({
   const lastNameRef = useRef<HTMLSpanElement>(null);
   const roleRef = useRef<HTMLParagraphElement>(null);
   const scrollIndRef = useRef<HTMLButtonElement>(null);
+  const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
+  const [hasInteracted, setHasInteracted] = useState(false);
+  const [controlsVisible, setControlsVisible] = useState(true);
+
+  const hasInteractedRef = useRef(false);
 
   // Autoplay both layers muted (required by browsers), keep them in sync.
   useEffect(() => {
@@ -39,8 +44,6 @@ export default function VideoIntro({
       console.log("Autoplay prevented:", err)
     );
 
-    // Keep the ambient copy loosely synced to the frame copy so the blur
-    // doesn't visibly drift out of phase over a long loop.
     const resync = () => {
       if (Math.abs(ambient.currentTime - frame.currentTime) > 0.35) {
         ambient.currentTime = frame.currentTime;
@@ -48,6 +51,56 @@ export default function VideoIntro({
     };
     frame.addEventListener("timeupdate", resync);
     return () => frame.removeEventListener("timeupdate", resync);
+  }, []);
+
+  // Video plays once, then auto-scroll to the next section when it ends.
+  useEffect(() => {
+    const frame = frameVideoRef.current;
+    if (!frame) return;
+    const handleEnded = () => scrollToNext();
+    frame.addEventListener("ended", handleEnded);
+    return () => frame.removeEventListener("ended", handleEnded);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const enableSound = useCallback(() => {
+    if (hasInteractedRef.current) return;
+    hasInteractedRef.current = true;
+
+    const frame = frameVideoRef.current;
+    if (frame) {
+      frame.muted = false;
+      frame.volume = 1;
+      frame.play().catch((e) => console.error("Play failed:", e));
+    }
+    setIsMuted(false);
+    setHasInteracted(true);
+  }, []);
+
+  // First click anywhere on the page unmutes and enables sound.
+  useEffect(() => {
+    const handleFirstClick = () => enableSound();
+    window.addEventListener("click", handleFirstClick, { once: true });
+    return () => window.removeEventListener("click", handleFirstClick);
+  }, [enableSound]);
+
+  // Auto-hide the bottom controls after 3s of no mouse movement.
+  useEffect(() => {
+    const resetHideTimer = () => {
+      setControlsVisible(true);
+      if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+      hideTimerRef.current = setTimeout(() => setControlsVisible(false), 3000);
+    };
+
+    resetHideTimer();
+    window.addEventListener("mousemove", resetHideTimer);
+    window.addEventListener("touchstart", resetHideTimer);
+
+    return () => {
+      window.removeEventListener("mousemove", resetHideTimer);
+      window.removeEventListener("touchstart", resetHideTimer);
+      if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+    };
   }, []);
 
   useEffect(() => {
@@ -83,6 +136,7 @@ export default function VideoIntro({
   }, []);
 
   const togglePlay = () => {
+    enableSound();
     const ambient = ambientVideoRef.current;
     const frame = frameVideoRef.current;
     if (!ambient || !frame) return;
@@ -97,10 +151,11 @@ export default function VideoIntro({
     setIsPlaying(!isPlaying);
   };
 
-  // Audio only ever plays from the sharp foreground copy — the ambient
-  // background copy stays muted at all times, otherwise you'd get doubled
-  // audio.
   const toggleMute = () => {
+    if (!hasInteractedRef.current) {
+      enableSound();
+      return;
+    }
     const frame = frameVideoRef.current;
     if (!frame) return;
 
@@ -108,10 +163,7 @@ export default function VideoIntro({
     frame.muted = nextMute;
     frame.volume = nextMute ? 0 : 1;
     if (!nextMute) {
-      frame
-        .play()
-        .then(() => console.log("Audio active"))
-        .catch((e) => console.error("Play failed:", e));
+      frame.play().catch((e) => console.error("Play failed:", e));
     }
     setIsMuted(nextMute);
   };
@@ -127,7 +179,6 @@ export default function VideoIntro({
         ref={ambientVideoRef}
         className={styles.ambientVideo}
         autoPlay
-        loop
         muted
         playsInline
         aria-hidden="true"
@@ -141,7 +192,6 @@ export default function VideoIntro({
           ref={frameVideoRef}
           className={styles.frameVideo}
           autoPlay
-          loop
           muted
           playsInline
         >
@@ -170,12 +220,20 @@ export default function VideoIntro({
         </p>
       </header>
 
-      <div className={styles.bottomControls}>
+      {!hasInteracted && (
+        <div className={styles.soundHint}>Click anywhere to enable sound</div>
+      )}
+
+      <div
+        className={`${styles.bottomControls} ${
+          controlsVisible ? styles.controlsVisible : styles.controlsHidden
+        }`}
+      >
         <button className={styles.controlBtn} onClick={togglePlay}>
-          {isPlaying ? "⏸ Pause Video" : "▶ Play Video"}
+          {isPlaying ? "⏸ Pause" : "▶ Play"}
         </button>
         <button className={styles.controlBtn} onClick={toggleMute}>
-          {isMuted ? "🔊 Unmute Audio" : "🔇 Mute Audio"}
+          {isMuted ? "🔇 Unmute" : "🔊 Mute"}
         </button>
       </div>
 
