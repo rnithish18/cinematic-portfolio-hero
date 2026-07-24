@@ -5,14 +5,11 @@ import gsap from "gsap";
 import CinematicLayer from "./CinematicLayer";
 import styles from "./VideoIntro.module.css";
 
-// Same clip, used twice: a blurred, scaled-up "ambient" copy fills the
-// full viewport behind everything, and a sharp, inset "frame" copy sits
-// on top with rounded corners — the Apple TV/Music style treatment.
-const VIDEO_SRC = "/videos/hero.mp4";
-
 export default function VideoIntro({
+  videoSrc = "/videos/hero.mp4",
   nextSectionId = "projects",
 }: {
+  videoSrc?: string;
   nextSectionId?: string;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -136,7 +133,7 @@ export default function VideoIntro({
         aria-hidden="true"
         tabIndex={-1}
       >
-        <source src={VIDEO_SRC} type="video/mp4" />
+        <source src={videoSrc} type="video/mp4" />
       </video>
 
       <div className={styles.frameWrapper}>
@@ -148,7 +145,7 @@ export default function VideoIntro({
           muted
           playsInline
         >
-          <source src={VIDEO_SRC} type="video/mp4" />
+          <source src={videoSrc} type="video/mp4" />
         </video>
       </div>
 
