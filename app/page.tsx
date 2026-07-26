@@ -1,1 +1,19 @@
-import Navbar from "@/components/Navbar"; import VideoIntro from "@/components/VideoIntro"; import ProjectsShowcase from "@/components/ProjectsShowcase"; import CertificationsSection from "@/components/CertificationsSection"; export default function Home() { return ( <main style={{ minHeight: "100vh", backgroundColor: "#090a0d" }}> <Navbar /> <VideoIntro videoSrc="/hero-video.mp4" nextSectionId="projects" /> <div id="projects"> <ProjectsShowcase /> </div> <CertificationsSection /> </main> ); }
+import Navbar from "@/components/Navbar";
+import VideoIntro from "@/components/VideoIntro";
+import ScrollTransition from "@/components/ScrollTransition";
+import ProjectsShowcase from "@/components/ProjectsShowcase";
+import CertificationsSection from "@/components/CertificationsSection";
+
+export default function Home() {
+  return (
+    <main style={{ minHeight: "100vh", backgroundColor: "#090a0d" }}>
+      <Navbar />
+      <VideoIntro videoSrc="/hero-video.mp4" nextSectionId="projects" />
+      <ScrollTransition />
+      <div id="projects">
+        <ProjectsShowcase />
+      </div>
+      <CertificationsSection />
+    </main>
+  );
+}
