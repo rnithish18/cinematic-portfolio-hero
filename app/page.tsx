@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <main style={{ minHeight: "100vh", backgroundColor: "#090a0d" }}>
       <Navbar />
-      <VideoIntro videoSrc="/hero-video.mp4" nextSectionId="projects" />
+      <VideoIntro videoSrc="/hero-video.mp4" nextSectionId="about" />
       <ScrollTransition />
       <About />
       <div id="projects">

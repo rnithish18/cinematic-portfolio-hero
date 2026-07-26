@@ -7,6 +7,7 @@ export type FeaturedProject = {
   description: string;
   image: string;
   demoUrl: string;
+  videoUrl?: string;
   stack: string[];
 };
 
@@ -29,6 +30,8 @@ export const FEATURED_PROJECTS: FeaturedProject[] = [
       'A full-stack, bilingual (English + Tamil) web platform combining LLM reasoning with agronomic logic.',
     image: '/projects/farming-assistant.png',
     demoUrl: 'https://farming-assistant-fxvg.onrender.com/static/index.html',
+    videoUrl:
+      'https://www.linkedin.com/posts/r-nithish-181206n_agritech-artificialintelligence-fastapi-ugcPost-7484535863477944320-1I7s/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFyNmscBUkkdglmhNYCkrmdGSVTa7FW9FZw',
     stack: ['FastAPI', 'MongoDB Atlas', 'Groq LLaMA 3.3', 'OpenWeatherMap API', 'Web Speech API'],
   },
   {
@@ -40,7 +43,7 @@ export const FEATURED_PROJECTS: FeaturedProject[] = [
     description:
       'Architected an enterprise optimization platform scoring engineers against capability matrices.',
     image: '/projects/skill-matrix.png',
-    demoUrl: 'https://github.com/rnithish18',
+    demoUrl: 'https://github.com/rnithish18/employee-skill-matrix',
     stack: ['Python', 'JavaScript', 'SQL', 'HTML5', 'CSS3'],
   },
 ];

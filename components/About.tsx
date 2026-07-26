@@ -42,6 +42,8 @@ const funFacts = [
 export default function About() {
   return (
     <section id="about" className={styles.aboutSection}>
+      <div className={styles.bgGlowOne} aria-hidden="true" />
+      <div className={styles.bgGlowTwo} aria-hidden="true" />
       <div className={styles.container}>
         <div className={styles.photoWrapper}>
           <img src="/about-photo.jpg" alt="Nithish R" className={styles.photo} />
