@@ -55,24 +55,6 @@ const PROJECTS: Project[] = [
       "Shipped an interactive dashboard (HTML5, CSS3, JS) giving leadership real-time talent benchmarks at 98% query accuracy.",
     ],
   },
-  {
-    title: "AI-Driven Public Health Chatbot",
-    stack: ["Python", "NLP", "JSON"],
-    points: [
-      "Designed a low-latency diagnostic advisory chatbot that maps symptom data to regional public health outbreaks.",
-      "Improved conversation accuracy by 40% through structured rule-based mapping protocols.",
-      "Built an accessible front end that cut user lookup steps by 50% versus standard public health portals.",
-    ],
-  },
-  {
-    title: "Echoes of Jharkhand — Digital Tourism Platform",
-    stack: ["Full-Stack", "UI/UX"],
-    points: [
-      "Developed a multi-page tourism platform with context-aware chatbots, booking, and live market modules.",
-      "Built custom, geography-aware mapping components for regional exploration.",
-      "Delivered an offline-first flow that lifted content access speed by 25% on constrained mobile networks.",
-    ],
-  },
 ];
 
 const SKILLS: { label: string; value: string }[] = [
@@ -145,9 +127,9 @@ export default function Projects() {
         <span className={styles.eyebrow}>Selected Work</span>
         <h2 className={styles.heading}>Things I&apos;ve shipped.</h2>
         <p className={styles.intro}>
-          A voice-enabled AI farming platform, a full-stack optimization
-          tool, an ML-backed chatbot, and a tourism app — each one built to
-          solve a real, specific problem rather than to check a box.
+          A voice-enabled AI farming platform and a full-stack optimization
+          tool — each one built to solve a real, specific problem rather
+          than to check a box.
         </p>
       </div>
 
@@ -166,7 +148,7 @@ export default function Projects() {
             ))}
           </div>
 
-          <a
+          
             href={FEATURED.demoUrl}
             target="_blank"
             rel="noreferrer"
@@ -214,7 +196,7 @@ export default function Projects() {
 
         <div className={styles.linkRow}>
           {LINKS.map((link) => (
-            <a
+            
               key={link.label}
               href={link.href}
               target="_blank"
@@ -231,4 +213,4 @@ export default function Projects() {
       </div>
     </section>
   );
-}
+}P
