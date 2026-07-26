@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import VideoIntro from "@/components/VideoIntro";
 import ScrollTransition from "@/components/ScrollTransition";
+import About from "@/components/About";
 import ProjectsShowcase from "@/components/ProjectsShowcase";
 import CertificationsSection from "@/components/CertificationsSection";
 
@@ -10,6 +11,7 @@ export default function Home() {
       <Navbar />
       <VideoIntro videoSrc="/hero-video.mp4" nextSectionId="projects" />
       <ScrollTransition />
+      <About />
       <div id="projects">
         <ProjectsShowcase />
       </div>
