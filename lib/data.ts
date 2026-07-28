@@ -15,6 +15,7 @@ export type Certification = {
   title: string;
   issuer: string;
   date: string;
+  image: string;
   credentialUrl?: string;
   skills: string[];
 };
@@ -53,6 +54,7 @@ export const CERTIFICATIONS: Certification[] = [
     title: 'Java Foundation Certification',
     issuer: 'Infosys Springboard',
     date: 'May 2026',
+    image: '/certificates/java-foundation.png',
     credentialUrl: 'https://verify.onwingspan.com',
     skills: ['Java', 'OOP', 'Programming Fundamentals'],
   },
@@ -60,12 +62,14 @@ export const CERTIFICATIONS: Certification[] = [
     title: 'Programming In Java (Elite, 79%)',
     issuer: 'NPTEL / IIT Kharagpur',
     date: 'Jul–Oct 2025',
+    image: '/certificates/nptel-java.jpg',
     skills: ['Java', 'Data Structures', 'Problem Solving'],
   },
   {
     title: 'Certified LLM Security Professional (CLLMSP)',
     issuer: 'Red Team Leaders',
     date: 'June 2026',
+    image: '/certificates/cllmsp.png',
     credentialUrl: 'https://courses.redteamleaders.com/exam-completion/d170c992a3fe14ae',
     skills: ['LLM Security', 'AI Red Teaming', 'Prompt Injection Defense'],
   },
@@ -73,48 +77,56 @@ export const CERTIFICATIONS: Certification[] = [
     title: 'Introduction to Cybersecurity',
     issuer: 'Cisco Networking Academy',
     date: 'Jan 2026',
+    image: '/certificates/cybersecurity.png',
     skills: ['Cybersecurity', 'Network Security', 'Threat Awareness'],
   },
   {
     title: 'Introduction to IoT and Digital Transformation',
     issuer: 'Cisco Networking Academy',
     date: 'Jan 2026',
+    image: '/certificates/iot-digital-transformation.png',
     skills: ['IoT', 'Digital Transformation', 'Networking'],
   },
   {
     title: 'Python Programming Virtual Internship',
     issuer: 'CodSoft',
     date: 'Apr 2026',
+    image: '/certificates/codsoft-internship.jpg',
     skills: ['Python', 'Software Development'],
   },
   {
-    title: "Data Science & Machine Learning Roadmap Webinar",
+    title: 'Data Science & Machine Learning Roadmap Webinar',
     issuer: 'GUVI × HCL',
     date: 'Jan 2026',
+    image: '/certificates/data-science-ml-webinar.jpg',
     skills: ['Data Science', 'Machine Learning'],
   },
   {
     title: 'AI Internship (1 Month)',
     issuer: 'NoviTech R&D Pvt. Ltd.',
     date: 'Jun–Jul 2026',
+    image: '/certificates/novitech-ai-internship.jpg',
     skills: ['Artificial Intelligence', 'Data Handling', 'Applied AI Systems'],
   },
   {
     title: '30-Day MasterClass in Artificial Intelligence',
     issuer: 'NoviTech R&D Pvt. Ltd.',
     date: 'Jun–Jul 2026',
+    image: '/certificates/novitech-ai-masterclass.jpg',
     skills: ['Artificial Intelligence', 'AI Model Training'],
   },
   {
     title: '21-Day MasterClass in Power BI',
     issuer: 'NoviTech R&D Pvt. Ltd.',
     date: 'Aug 2025',
+    image: '/certificates/novitech-powerbi.png',
     skills: ['Power BI', 'Data Visualization', 'Analytics'],
   },
   {
     title: 'Web Development in React.js: Build a Web App',
     issuer: 'Coursera Project Network',
     date: 'Dec 2025',
+    image: '/certificates/react-web-dev.jpg',
     credentialUrl: 'https://coursera.org/verify/WWDIU4Q79ZGE',
     skills: ['React.js', 'Web Development'],
   },
@@ -122,36 +134,42 @@ export const CERTIFICATIONS: Certification[] = [
     title: 'Android App Development Workshop',
     issuer: 'Vectonix Technologies',
     date: 'Feb 2026',
+    image: '/certificates/vectonix-workshop.jpg',
     skills: ['Android Development', 'Mobile Apps'],
   },
   {
     title: 'Salesforce Administrator Explorer',
     issuer: 'FutureSkills Prime (MeitY–NASSCOM) × Salesforce',
     date: 'Nov 2025',
+    image: '/certificates/salesforce.png',
     skills: ['Salesforce', 'CRM Administration'],
   },
   {
     title: 'International Certified Career Coach – Foundation',
     issuer: 'Mindler × Career Development Alliance',
     date: 'Jan 2026',
+    image: '/certificates/international-career-coach.jpg',
     skills: ['Career Coaching', 'Mentorship'],
   },
   {
     title: 'Roadmap to Become a Data Scientist at Amazon',
     issuer: 'Coding Ninjas',
     date: '2026',
+    image: '/certificates/coding-ninjas-roadmap.jpg',
     skills: ['Data Science', 'Career Roadmap'],
   },
   {
     title: 'UI/UX Webinar',
     issuer: 'Brand Nomia Academy',
     date: 'May 2026',
+    image: '/certificates/ux-webinar.jpg',
     skills: ['UI/UX Design'],
   },
   {
     title: 'Internship Common Aptitude Test (ICAT)',
     issuer: 'ICAT',
     date: 'Nov 2024',
+    image: '/certificates/icat-aptitude.png',
     skills: ['Aptitude', 'Problem Solving'],
   },
 ];
