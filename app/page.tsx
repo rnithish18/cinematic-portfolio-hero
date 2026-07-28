@@ -4,6 +4,7 @@ import ScrollTransition from "@/components/ScrollTransition";
 import About from "@/components/About";
 import ProjectsShowcase from "@/components/ProjectsShowcase";
 import CertificationsSection from "@/components/CertificationsSection";
+import Contact from "@/components/Contact";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
         <ProjectsShowcase />
       </div>
       <CertificationsSection />
+      <Contact />
     </main>
   );
 }
