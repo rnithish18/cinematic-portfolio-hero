@@ -109,9 +109,9 @@ export default function Contact() {
             })}
 
             {minorChannels.map((c) => (
-              <a
+            <a  
                 key={c.label}
-                href={c.href}
+                href={c.href === null ? undefined : c.href}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`${styles.row} ${styles.minorRow}`}
