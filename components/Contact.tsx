@@ -55,7 +55,7 @@ const channels: Channel[] = [
 
 const minorChannels: Channel[] = [
   { label: "Email 2", value: "rnithish181206@gmail.com", href: "mailto:rnithish181206@gmail.com", icon: "email" },
-  { label: "Instagram", value: "@nithish_r007", href: "https://www.instagram.com/nithish_r007/", icon: "instagram", note: "not very active" },
+  { label: "Instagram", value: "@nithish_r007", href: "https://www.instagram.com/nithish_r007/", icon: "instagram" },
 ];
 
 export default function Contact() {
