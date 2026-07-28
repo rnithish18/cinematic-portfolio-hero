@@ -37,7 +37,15 @@ const icons = {
   ),
 };
 
-const channels = [
+type Channel = {
+  label: string;
+  value: string;
+  href: string | null;
+  icon: string;
+  note?: string;
+};
+
+const channels: Channel[] = [
   { label: "WhatsApp", value: "+91 7845074566", href: "https://wa.me/917845074566", icon: "whatsapp" },
   { label: "Telegram", value: "+91 7845074566", href: "https://t.me/+917845074566", icon: "telegram" },
   { label: "Email", value: "rnithish18122006@gmail.com", href: "mailto:rnithish18122006@gmail.com", icon: "email" },
@@ -45,9 +53,9 @@ const channels = [
   { label: "Location", value: "Namakkal, Tamil Nadu, India", href: null, icon: "location" },
 ];
 
-const minorChannels = [
+const minorChannels: Channel[] = [
   { label: "Email 2", value: "rnithish181206@gmail.com", href: "mailto:rnithish181206@gmail.com", icon: "email" },
-  { label: "Instagram", value: "@nithish_r007", href: "https://www.instagram.com/nithish_r007/", icon: "instagram",},
+  { label: "Instagram", value: "@nithish_r007", href: "https://www.instagram.com/nithish_r007/", icon: "instagram", note: "not very active" },
 ];
 
 export default function Contact() {
