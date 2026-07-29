@@ -4,18 +4,24 @@ import { useState, useEffect, useRef, type ReactNode } from "react";
 import styles from "./About.module.css";
 import {
   SiReact,
-  SiVite,
   SiJavascript,
   SiHtml5,
   SiPython,
-  SiFastapi,
   SiMongodb,
   SiGit,
   SiGithub,
-  SiGithubactions,
-  SiRender,
 } from "react-icons/si";
-import { FaJava, FaDatabase, FaBrain, FaCode } from "react-icons/fa";
+import {
+  FaJava,
+  FaDatabase,
+  FaBrain,
+  FaCode,
+  FaEnvelope,
+  FaServer,
+  FaBolt,
+  FaCloud,
+  FaLinkedin,
+} from "react-icons/fa";
 
 const photos = [
   "/about-photo-1.jpg",
@@ -29,23 +35,23 @@ const photos = [
 const ROTATE_INTERVAL = 10000; // 10s
 
 const skillIconMap: Record<string, ReactNode> = {
-  React: <SiReact />,
-  Vite: <SiVite />,
-  JavaScript: <SiJavascript />,
-  "HTML/CSS": <SiHtml5 />,
-  Python: <SiPython />,
-  FastAPI: <SiFastapi />,
-  SQL: <FaDatabase />,
-  "Groq (LLaMA 3.3 70B)": <FaBrain />,
-  "Google Gemini API": <FaBrain />,
-  "Qwen Vision": <FaBrain />,
-  "Prompt Engineering": <FaBrain />,
-  "MongoDB Atlas": <SiMongodb />,
-  Render: <SiRender />,
-  "GitHub Actions/Pages": <SiGithubactions />,
-  "Git & GitHub": <SiGithub />,
-  "VS Code": <FaCode />,
-  Java: <FaJava />,
+  React: <SiReact style={{ color: "#61DAFB" }} />,
+  Vite: <FaBolt style={{ color: "#646CFF" }} />,
+  JavaScript: <SiJavascript style={{ color: "#F7DF1E" }} />,
+  "HTML/CSS": <SiHtml5 style={{ color: "#E34F26" }} />,
+  Python: <SiPython style={{ color: "#3776AB" }} />,
+  FastAPI: <FaServer style={{ color: "#009688" }} />,
+  SQL: <FaDatabase style={{ color: "#4479A1" }} />,
+  "Groq (LLaMA 3.3 70B)": <FaBrain style={{ color: "#F55036" }} />,
+  "Google Gemini API": <FaBrain style={{ color: "#4285F4" }} />,
+  "Qwen Vision": <FaBrain style={{ color: "#722ED1" }} />,
+  "Prompt Engineering": <FaBrain style={{ color: "#E07A3F" }} />,
+  "MongoDB Atlas": <SiMongodb style={{ color: "#47A248" }} />,
+  Render: <FaCloud style={{ color: "#46E3B7" }} />,
+  "GitHub Actions/Pages": <FaCode style={{ color: "#2088FF" }} />,
+  "Git & GitHub": <SiGithub style={{ color: "#F05032" }} />,
+  "VS Code": <FaCode style={{ color: "#007ACC" }} />,
+  Java: <FaJava style={{ color: "#EA2D2E" }} />,
 };
 
 const skillGroups = [
@@ -68,6 +74,13 @@ const funFacts = [
   "Built an AI that talks to farmers in Tamil & English",
   "Obsessed with clean code and cleaner UI",
   "Ships side projects faster than coffee gets cold",
+];
+
+// Floating badges shown around the photo
+const floatingBadges = [
+  { icon: <SiReact style={{ color: "#61DAFB" }} />, position: styles.badgeTopRight },
+  { icon: <SiPython style={{ color: "#3776AB" }} />, position: styles.badgeBottomLeft },
+  { icon: <FaJava style={{ color: "#EA2D2E" }} />, position: styles.badgeMidRight },
 ];
 
 export default function About() {
@@ -124,38 +137,54 @@ export default function About() {
       <div className={styles.bgGlowTwo} aria-hidden="true" />
       <div className={styles.container}>
         <div className={`${styles.photoWrapper} ${styles.fadeInLeft}`}>
-          <div
-            onClick={handlePhotoClick}
-            style={{
-              position: "relative",
-              width: "100%",
-              aspectRatio: "3 / 4",
-              borderRadius: "12px",
-              overflow: "hidden",
-              border: "1px solid rgba(255,255,255,0.08)",
-              cursor: "pointer",
-            }}
-          >
-            {photos.map((src, i) => (
-              <img
-                key={src}
-                src={src}
-                alt="Nithish R"
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  opacity: i === activeIndex ? 1 : 0,
-                  transition: "opacity 1s ease",
-                  pointerEvents: i === activeIndex ? "auto" : "none",
-                }}
-              />
+          <div className={styles.photoGlowRing}>
+            <div
+              onClick={handlePhotoClick}
+              className={styles.photoStage}
+              style={{
+                position: "relative",
+                width: "100%",
+                aspectRatio: "3 / 4",
+                borderRadius: "20px",
+                overflow: "hidden",
+                cursor: "pointer",
+              }}
+            >
+              {/* DO NOT MODIFY — rotation logic */}
+              {photos.map((src, i) => (
+                <img
+                  key={src}
+                  src={src}
+                  alt="Nithish R"
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    opacity: i === activeIndex ? 1 : 0,
+                    transition: "opacity 1s ease",
+                    pointerEvents: i === activeIndex ? "auto" : "none",
+                  }}
+                />
+              ))}
+              {/* END rotation logic */}
+
+              <div className={styles.photoOverlay} aria-hidden="true" />
+              <span className={styles.clickHint}>Click to change</span>
+
+              <div className={styles.photoCaption}>
+                <span className={styles.captionLine}>BUILDING SOLUTIONS</span>
+                <span className={styles.captionLineAccent}>DRIVING IMPACT</span>
+              </div>
+            </div>
+
+            {floatingBadges.map((b, i) => (
+              <div key={i} className={`${styles.floatBadge} ${b.position}`}>
+                {b.icon}
+              </div>
             ))}
-            <div className={styles.photoOverlay} aria-hidden="true" />
-            <span className={styles.clickHint}>Click to change</span>
           </div>
 
           <div className={styles.progressTrack}>
@@ -177,27 +206,35 @@ export default function About() {
             <a  href="https://github.com/rnithish18"
               target="_blank"
               rel="noopener noreferrer"
-              className={styles.socialBtn}
+              className={styles.socialIconBtn}
+              aria-label="GitHub"
             >
-              GitHub
+              <SiGithub />
             </a>
             
             <a  href="https://www.linkedin.com/in/r-nithish-181206n/"
               target="_blank"
               rel="noopener noreferrer"
-              className={styles.socialBtn}
+              className={styles.socialIconBtn}
+              aria-label="LinkedIn"
             >
-              LinkedIn
+              <FaLinkedin style={{ color: "#0A66C2" }} />
             </a>
-            <a href="mailto:rnithish18122006@gmail.com" className={styles.socialBtn}>
-              Email
+            
+            <a  href="mailto:rnithish18122006@gmail.com"
+              className={styles.socialIconBtn}
+              aria-label="Email"
+            >
+              <FaEnvelope style={{ color: "#E07A3F" }} />
             </a>
           </div>
         </div>
 
         <div className={`${styles.content} ${styles.fadeInRight}`}>
           <span className={styles.eyebrow}>WHO I AM</span>
-          <h2 className={styles.heading}>About Me</h2>
+          <h2 className={styles.heading}>
+            About <span className={styles.headingGradient}>Me</span>
+          </h2>
 
           <p className={styles.bio}>
             I&apos;m Nithish R, a Computer Science and Engineering student and
@@ -225,7 +262,7 @@ export default function About() {
                 <div className={styles.skillTags}>
                   {group.skills.map((skill) => (
                     <span key={skill} className={styles.skillTag}>
-                      <span className={styles.skillTagIcon}>
+                      <span className={styles.skillTagIconCircle}>
                         {skillIconMap[skill] ?? null}
                       </span>
                       {skill}
