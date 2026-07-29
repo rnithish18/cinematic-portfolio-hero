@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CERTIFICATIONS } from "@/lib/data";
 import styles from "./CertificationsSection.module.css";
 
 export default function CertificationsSection() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
+  const totalCerts = CERTIFICATIONS.length;
+  const totalSkills = new Set(CERTIFICATIONS.flatMap((c) => c.skills)).size;
   const active = activeIndex !== null ? CERTIFICATIONS[activeIndex] : null;
 
   const showPrev = () => {
@@ -19,32 +21,91 @@ export default function CertificationsSection() {
     setActiveIndex((activeIndex + 1) % CERTIFICATIONS.length);
   };
 
+  // Keyboard navigation for the lightbox
+  useEffect(() => {
+    if (activeIndex === null) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActiveIndex(null);
+      if (e.key === "ArrowLeft") showPrev();
+      if (e.key === "ArrowRight") showNext();
+    };
+    window.addEventListener("keydown", handleKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", handleKey);
+      document.body.style.overflow = "";
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeIndex]);
+
   return (
     <section id="certifications" className={styles.certSection}>
-      <div className={styles.header}>
-        <span className={styles.eyebrow}>VERIFIED CREDENTIALS</span>
-        <h2 className={styles.title}>Certifications &amp; Achievements</h2>
+      <div className={styles.headerRow}>
+        <div className={styles.header}>
+          <span className={styles.eyebrow}>PROVEN SKILLS. REAL IMPACT.</span>
+          <h2 className={styles.title}>
+            Certifications &amp; <span className={styles.titleAccent}>Achievements</span>
+          </h2>
+          <p className={styles.subtitle}>
+            A collection of certifications that validate my skills and commitment to continuous learning.
+          </p>
+        </div>
+
+        <div className={styles.stats}>
+          <div className={styles.statCard}>
+            <span className={styles.statIcon}>🏆</span>
+            <span className={styles.statNumber}>{totalCerts}+</span>
+            <span className={styles.statLabel}>Certifications</span>
+          </div>
+          <div className={styles.statCard}>
+            <span className={styles.statIcon}>🛡️</span>
+            <span className={styles.statNumber}>{totalSkills}+</span>
+            <span className={styles.statLabel}>Skills Validated</span>
+          </div>
+          <div className={styles.statCard}>
+            <span className={styles.statIcon}>✅</span>
+            <span className={styles.statNumber}>100%</span>
+            <span className={styles.statLabel}>Dedication</span>
+          </div>
+        </div>
       </div>
 
-      <div className={styles.wall}>
+      <div className={styles.grid}>
         {CERTIFICATIONS.map((cert, i) => (
           <button
             key={cert.title}
-            className={styles.wallItem}
+            className={styles.card}
+            style={{ animationDelay: `${i * 0.06}s` }}
             onClick={() => setActiveIndex(i)}
             aria-label={`View ${cert.title}`}
           >
-            <img src={cert.image} alt={cert.title} className={styles.wallImage} />
-            <div className={styles.wallOverlay}>
-              <span className={styles.wallIssuer}>{cert.issuer}</span>
-              <span className={styles.wallTitle}>{cert.title}</span>
+            <div className={styles.imageWrap}>
+              <img src={cert.image} alt={cert.title} className={styles.cardImage} />
+              <div className={styles.imageShine} />
+              <span className={styles.expandHint}>🔍 View details</span>
+            </div>
+            <div className={styles.cardFooter}>
+              <div className={styles.cardText}>
+                <span className={styles.cardIssuer}>{cert.issuer}</span>
+                <span className={styles.cardTitle}>{cert.title}</span>
+              </div>
+              <span className={styles.verifiedBadge}>✓ Verified</span>
             </div>
           </button>
         ))}
       </div>
 
+      <div className={styles.footerRow}>
+        <span className={styles.footerText}>Building Skills, Creating Impact 💜</span>
+      </div>
+
       {active && (
-        <div className={styles.lightbox} onClick={() => setActiveIndex(null)}>
+        <div
+          className={styles.lightbox}
+          onClick={() => setActiveIndex(null)}
+          role="dialog"
+          aria-modal="true"
+        >
           <button
             className={styles.lightboxClose}
             onClick={() => setActiveIndex(null)}
@@ -65,14 +126,13 @@ export default function CertificationsSection() {
           </button>
 
           <div
+            key={activeIndex}
             className={styles.lightboxContent}
             onClick={(e) => e.stopPropagation()}
           >
-            <img
-              src={active.image}
-              alt={active.title}
-              className={styles.lightboxImage}
-            />
+            <div className={styles.lightboxImageWrap}>
+              <img src={active.image} alt={active.title} className={styles.lightboxImage} />
+            </div>
             <div className={styles.lightboxInfo}>
               <span className={styles.lightboxIssuer}>{active.issuer}</span>
               <h3 className={styles.lightboxTitle}>{active.title}</h3>
@@ -86,7 +146,7 @@ export default function CertificationsSection() {
               </div>
               {active.credentialUrl && (
                 
-                 <a href={active.credentialUrl}
+                <a  href={active.credentialUrl}
                   target="_blank"
                   rel="noreferrer"
                   className={styles.verifyLink}
@@ -94,6 +154,9 @@ export default function CertificationsSection() {
                   Verify Credential ↗
                 </a>
               )}
+              <span className={styles.lightboxCounter}>
+                {activeIndex! + 1} / {CERTIFICATIONS.length}
+              </span>
             </div>
           </div>
 
