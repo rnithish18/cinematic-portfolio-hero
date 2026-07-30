@@ -4,6 +4,7 @@ import ScrollTransition from "@/components/ScrollTransition";
 import About from "@/components/About";
 import ProjectsShowcase from "@/components/ProjectsShowcase";
 import CertificationsSection from "@/components/CertificationsSection";
+import LeetCodeSection from "@/components/LeetCodeSection";
 import Contact from "@/components/Contact";
 
 export default function Home() {
@@ -17,6 +18,7 @@ export default function Home() {
         <ProjectsShowcase />
       </div>
       <CertificationsSection />
+      <LeetCodeSection />
       <Contact />
     </main>
   );
