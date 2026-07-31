@@ -1,15 +1,42 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CERTIFICATIONS } from "@/lib/data";
 import styles from "./CertificationsSection.module.css";
 
 export default function CertificationsSection() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [gridVisible, setGridVisible] = useState(false);
+  const [settled, setSettled] = useState(false); // true once stagger entrance is fully done
+  const gridRef = useRef<HTMLDivElement>(null);
 
   const totalCerts = CERTIFICATIONS.length;
   const totalSkills = new Set(CERTIFICATIONS.flatMap((c) => c.skills)).size;
   const active = activeIndex !== null ? CERTIFICATIONS[activeIndex] : null;
+
+  // Trigger the staggered card animation once the grid scrolls into view
+  useEffect(() => {
+    const node = gridRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setGridVisible(true);
+          observer.unobserve(node);
+
+          // After the last card's stagger delay + transition finishes,
+          // clear the per-card delay so hover transitions stay snappy.
+          const totalTime = CERTIFICATIONS.length * 60 + 700; // ms
+          setTimeout(() => setSettled(true), totalTime);
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [totalCerts]);
 
   const showPrev = () => {
     if (activeIndex === null) return;
@@ -70,12 +97,14 @@ export default function CertificationsSection() {
         </div>
       </div>
 
-      <div className={styles.grid}>
+      <div className={styles.grid} ref={gridRef}>
         {CERTIFICATIONS.map((cert, i) => (
           <button
             key={cert.title}
-            className={styles.card}
-            style={{ animationDelay: `${i * 0.06}s` }}
+            className={`${styles.card} ${gridVisible ? styles.cardVisible : ""}`}
+            style={{
+              transitionDelay: !settled && gridVisible ? `${i * 0.06}s` : "0s",
+            }}
             onClick={() => setActiveIndex(i)}
             aria-label={`View ${cert.title}`}
           >
@@ -146,7 +175,8 @@ export default function CertificationsSection() {
               </div>
               {active.credentialUrl && (
                 
-                <a  href={active.credentialUrl}
+                <a
+                  href={active.credentialUrl}
                   target="_blank"
                   rel="noreferrer"
                   className={styles.verifyLink}
