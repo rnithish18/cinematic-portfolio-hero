@@ -1,5 +1,6 @@
 import { fetchLeetCodeStats } from "@/lib/leetcode";
 import styles from "./page.module.css";
+import ScrollReveal from "@/components/ScrollReveal";
 
 const USERNAME = "O7WZ2gofuH";
 export const revalidate = 3600;
@@ -87,135 +88,147 @@ export default async function LeetCodePage() {
         <p className={styles.subtitle}>Pulled live from leetcode.com/u/{stats.username}</p>
       </div>
 
-      <div className={styles.topGrid}>
-        <div className={styles.ringCard}>
-          <div className={styles.ring} style={{ ["--pct" as any]: solvedPct }}>
-            <div className={styles.ringInner}>
-              <span className={styles.ringNumber}>{stats.totalSolved}</span>
-              <span className={styles.ringLabel}>/ {stats.totalQuestions}</span>
+      <ScrollReveal direction="up">
+        <div className={styles.topGrid}>
+          <div className={styles.ringCard}>
+            <div className={styles.ring} style={{ ["--pct" as any]: solvedPct }}>
+              <div className={styles.ringInner}>
+                <span className={styles.ringNumber}>{stats.totalSolved}</span>
+                <span className={styles.ringLabel}>/ {stats.totalQuestions}</span>
+              </div>
+            </div>
+            <span className={styles.ringPct}>{solvedPct}% complete</span>
+          </div>
+
+          <div className={styles.miniStats}>
+            <div className={styles.miniCard}>
+              <span className={styles.miniIcon}>🌐</span>
+              <span className={styles.miniLabel}>Global ranking</span>
+              <span className={styles.miniValue}>{stats.ranking ? `#${stats.ranking.toLocaleString()}` : "—"}</span>
+            </div>
+            <div className={styles.miniCard}>
+              <span className={styles.miniIcon}>🔥</span>
+              <span className={styles.miniLabel}>Day streak</span>
+              <span className={styles.miniValue}>{stats.streak}</span>
+            </div>
+            <div className={styles.miniCard}>
+              <span className={styles.miniIcon}>🏆</span>
+              <span className={styles.miniLabel}>Contest rating</span>
+              <span className={styles.miniValue}>{stats.contestRating ?? "—"}</span>
+            </div>
+            <div className={styles.miniCard}>
+              <span className={styles.miniIcon}>🎯</span>
+              <span className={styles.miniLabel}>Contests joined</span>
+              <span className={styles.miniValue}>{stats.contestsAttended}</span>
             </div>
           </div>
-          <span className={styles.ringPct}>{solvedPct}% complete</span>
         </div>
+      </ScrollReveal>
 
-        <div className={styles.miniStats}>
-          <div className={styles.miniCard}>
-            <span className={styles.miniIcon}>🌐</span>
-            <span className={styles.miniLabel}>Global ranking</span>
-            <span className={styles.miniValue}>{stats.ranking ? `#${stats.ranking.toLocaleString()}` : "—"}</span>
+      <div className={styles.midGrid}>
+        <ScrollReveal direction="left">
+          <div className={styles.card}>
+            <h3 className={styles.cardHeading}>Difficulty breakdown</h3>
+            {bars.map((bar, i) => {
+              const pct = bar.total ? Math.round((bar.solved / bar.total) * 100) : 0;
+              return (
+                <div key={bar.label} className={styles.barRow}>
+                  <div className={styles.barLabelRow}>
+                    <span style={{ color: bar.color }} className={styles.barLabel}>{bar.label}</span>
+                    <span className={styles.barValue}>{bar.solved} / {bar.total}</span>
+                  </div>
+                  <div className={styles.barTrack}>
+                    <div
+                      className={styles.barFill}
+                      style={{ width: `${pct}%`, background: bar.color, animationDelay: `${i * 0.15}s` }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
           </div>
-          <div className={styles.miniCard}>
-            <span className={styles.miniIcon}>🔥</span>
-            <span className={styles.miniLabel}>Day streak</span>
-            <span className={styles.miniValue}>{stats.streak}</span>
+        </ScrollReveal>
+
+        <ScrollReveal direction="right">
+          <div className={styles.card}>
+            <h3 className={styles.cardHeading}>Last 16 weeks</h3>
+            <div className={styles.heatmapGrid}>
+              {weeks.map((week, wi) => (
+                <div key={wi} className={styles.heatmapColumn}>
+                  {week.map((day) => (
+                    <div
+                      key={day.idx}
+                      className={styles.heatmapCell}
+                      data-level={levelForCount(day.count)}
+                      title={`${day.count} submissions`}
+                    />
+                  ))}
+                </div>
+              ))}
+            </div>
+            <div className={styles.heatmapLegend}>
+              <span>Less</span>
+              {[0, 1, 2, 3, 4].map((lvl) => (
+                <div key={lvl} className={styles.heatmapCell} data-level={lvl} />
+              ))}
+              <span>More</span>
+            </div>
           </div>
-          <div className={styles.miniCard}>
-            <span className={styles.miniIcon}>🏆</span>
-            <span className={styles.miniLabel}>Contest rating</span>
-            <span className={styles.miniValue}>{stats.contestRating ?? "—"}</span>
-          </div>
-          <div className={styles.miniCard}>
-            <span className={styles.miniIcon}>🎯</span>
-            <span className={styles.miniLabel}>Contests joined</span>
-            <span className={styles.miniValue}>{stats.contestsAttended}</span>
-          </div>
-        </div>
+        </ScrollReveal>
       </div>
 
       <div className={styles.midGrid}>
-        <div className={styles.card}>
-          <h3 className={styles.cardHeading}>Difficulty breakdown</h3>
-          {bars.map((bar, i) => {
-            const pct = bar.total ? Math.round((bar.solved / bar.total) * 100) : 0;
-            return (
-              <div key={bar.label} className={styles.barRow}>
-                <div className={styles.barLabelRow}>
-                  <span style={{ color: bar.color }} className={styles.barLabel}>{bar.label}</span>
-                  <span className={styles.barValue}>{bar.solved} / {bar.total}</span>
-                </div>
-                <div className={styles.barTrack}>
-                  <div
-                    className={styles.barFill}
-                    style={{ width: `${pct}%`, background: bar.color, animationDelay: `${i * 0.15}s` }}
-                  />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        <div className={styles.card}>
-          <h3 className={styles.cardHeading}>Last 16 weeks</h3>
-          <div className={styles.heatmapGrid}>
-            {weeks.map((week, wi) => (
-              <div key={wi} className={styles.heatmapColumn}>
-                {week.map((day) => (
-                  <div
-                    key={day.idx}
-                    className={styles.heatmapCell}
-                    data-level={levelForCount(day.count)}
-                    title={`${day.count} submissions`}
-                  />
-                ))}
-              </div>
-            ))}
-          </div>
-          <div className={styles.heatmapLegend}>
-            <span>Less</span>
-            {[0, 1, 2, 3, 4].map((lvl) => (
-              <div key={lvl} className={styles.heatmapCell} data-level={lvl} />
-            ))}
-            <span>More</span>
-          </div>
-        </div>
-      </div>
-
-      <div className={styles.midGrid}>
-        <div className={styles.card}>
-          <h3 className={styles.cardHeading}>Activity over time</h3>
-          <svg viewBox={`0 0 ${chartW} ${chartH}`} className={styles.chartSvg} preserveAspectRatio="none">
-            <path d={areaPath} className={styles.chartArea} />
-            <path d={linePath} className={styles.chartLine} />
-          </svg>
-          <div className={styles.chartAxis}>
-            <span>{points[0]?.label}</span>
-            <span>{points[points.length - 1]?.label}</span>
-          </div>
-        </div>
-
-        <div className={styles.card}>
-          <h3 className={styles.cardHeading}>Recently solved</h3>
-          {stats.recentSolved.length === 0 && (
-            <p className={styles.errorText}>No recent submissions found.</p>
-          )}
-          {stats.recentSolved.map((p) => (
-            <a
-              key={p.timestamp}
-              href={`https://leetcode.com/problems/${p.slug}/`}
-              target="_blank"
-              rel="noreferrer"
-              className={styles.recentRow}
-            >
-              <span className={styles.recentCheck}>✓</span>
-              <span className={styles.recentTitle}>{p.title}</span>
-              <span className={styles.recentTime}>{timeAgo(p.timestamp)}</span>
-            </a>
-          ))}
-        </div>
-      </div>
-
-      <div className={styles.card}>
-        <h3 className={styles.cardHeading}>Achievements</h3>
-        <div className={styles.badgeGrid}>
-          {badges.map((b) => (
-            <div key={b.label} className={styles.badge} data-active={b.active}>
-              <span className={styles.badgeIcon}>{b.icon}</span>
-              <span className={styles.badgeLabel}>{b.label}</span>
-              <span className={styles.badgeSub}>{b.sub}</span>
+        <ScrollReveal direction="left">
+          <div className={styles.card}>
+            <h3 className={styles.cardHeading}>Activity over time</h3>
+            <svg viewBox={`0 0 ${chartW} ${chartH}`} className={styles.chartSvg} preserveAspectRatio="none">
+              <path d={areaPath} className={styles.chartArea} />
+              <path d={linePath} className={styles.chartLine} />
+            </svg>
+            <div className={styles.chartAxis}>
+              <span>{points[0]?.label}</span>
+              <span>{points[points.length - 1]?.label}</span>
             </div>
-          ))}
-        </div>
+          </div>
+        </ScrollReveal>
+
+        <ScrollReveal direction="right">
+          <div className={styles.card}>
+            <h3 className={styles.cardHeading}>Recently solved</h3>
+            {stats.recentSolved.length === 0 && (
+              <p className={styles.errorText}>No recent submissions found.</p>
+            )}
+            {stats.recentSolved.map((p) => (
+              
+              <a  key={p.timestamp}
+               href={`https://leetcode.com/problems/${p.slug}/`}
+                target="_blank"
+                rel="noreferrer"
+                className={styles.recentRow}
+              >
+                <span className={styles.recentCheck}>✓</span>
+                <span className={styles.recentTitle}>{p.title}</span>
+                <span className={styles.recentTime}>{timeAgo(p.timestamp)}</span>
+              </a>
+            ))}
+          </div>
+        </ScrollReveal>
       </div>
+
+      <ScrollReveal direction="up">
+        <div className={styles.card}>
+          <h3 className={styles.cardHeading}>Achievements</h3>
+          <div className={styles.badgeGrid}>
+            {badges.map((b) => (
+              <div key={b.label} className={styles.badge} data-active={b.active}>
+                <span className={styles.badgeIcon}>{b.icon}</span>
+                <span className={styles.badgeLabel}>{b.label}</span>
+                <span className={styles.badgeSub}>{b.sub}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </ScrollReveal>
     </main>
   );
 }

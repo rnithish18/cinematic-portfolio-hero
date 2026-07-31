@@ -6,6 +6,7 @@ import ProjectsShowcase from "@/components/ProjectsShowcase";
 import CertificationsSection from "@/components/CertificationsSection";
 import LeetCodeSection from "@/components/LeetCodeSection";
 import Contact from "@/components/Contact";
+import ScrollReveal from "@/components/ScrollReveal";
 
 export default function Home() {
   return (
@@ -13,13 +14,28 @@ export default function Home() {
       <Navbar />
       <VideoIntro videoSrc="/hero-video.mp4" nextSectionId="about" />
       <ScrollTransition />
-      <About />
+
+      <ScrollReveal direction="up">
+        <About />
+      </ScrollReveal>
+
       <div id="projects">
-        <ProjectsShowcase />
+        <ScrollReveal direction="up">
+          <ProjectsShowcase />
+        </ScrollReveal>
       </div>
-      <CertificationsSection />
-      <LeetCodeSection />
-      <Contact />
+
+      <ScrollReveal direction="up">
+        <CertificationsSection />
+      </ScrollReveal>
+
+      <ScrollReveal direction="up">
+        <LeetCodeSection />
+      </ScrollReveal>
+
+      <ScrollReveal direction="fade">
+        <Contact />
+      </ScrollReveal>
     </main>
   );
 }
