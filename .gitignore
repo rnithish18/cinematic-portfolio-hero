@@ -5,3 +5,6 @@ out
 *.log
 public/sitemap.xml
 public/robots.txt
+.env
+.env.local
+.env.*.local
