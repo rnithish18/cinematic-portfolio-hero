@@ -1,6 +1,7 @@
 import { fetchLeetCodeStats } from "@/lib/leetcode";
 import styles from "./page.module.css";
 import ScrollReveal from "@/components/ScrollReveal";
+import GitHubContributions from "@/components/GitHubContributions";
 
 const USERNAME = "O7WZ2gofuH";
 export const revalidate = 3600;
@@ -201,7 +202,7 @@ export default async function LeetCodePage() {
             {stats.recentSolved.map((p) => (
               
               <a  key={p.timestamp}
-               href={`https://leetcode.com/problems/${p.slug}/`}
+                href={`https://leetcode.com/problems/${p.slug}/`}
                 target="_blank"
                 rel="noreferrer"
                 className={styles.recentRow}
@@ -214,6 +215,10 @@ export default async function LeetCodePage() {
           </div>
         </ScrollReveal>
       </div>
+
+      <ScrollReveal direction="up">
+        <GitHubContributions />
+      </ScrollReveal>
 
       <ScrollReveal direction="up">
         <div className={styles.card}>
