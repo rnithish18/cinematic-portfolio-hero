@@ -1,0 +1,70 @@
+:root {
+  /* Color tokens */
+  --bg-void: #0a0908;
+  --bg-panel: #17140f;
+  --accent-amber: #ff8a3d;
+  --accent-ember: #c1541c;
+  --accent-blue: #4a6cff;
+  --text-warm: #fff4e8;
+  --text-muted: rgba(255, 244, 232, 0.62);
+  --text-faint: rgba(255, 244, 232, 0.38);
+  --hairline: rgba(255, 244, 232, 0.14);
+
+  /* Type */
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Inter", -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Motion */
+  --ease-cinematic: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  background: var(--bg-void);
+  color: var(--text-warm);
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--accent-amber);
+  color: var(--bg-void);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

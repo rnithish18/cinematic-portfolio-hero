@@ -1,0 +1,10 @@
+node_modules
+.next
+out
+.DS_Store
+*.log
+public/sitemap.xml
+public/robots.txt
+.env
+.env.local
+.env.*.local

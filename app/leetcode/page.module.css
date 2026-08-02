@@ -1,0 +1,353 @@
+.page {
+  background: #07080a;
+  color: #fff;
+  min-height: 100vh;
+  padding: 12vh 4vw 8vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.header {
+  max-width: 700px;
+  animation: fadeInUp 0.6s ease both;
+}
+
+.eyebrow {
+  display: block;
+  font-family: monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  color: #ff8a3d;
+  margin-bottom: 0.75rem;
+}
+
+.title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  margin: 0 0 0.5rem;
+}
+
+.titleAccent {
+  color: #ff8a3d;
+}
+
+.subtitle {
+  color: #a8abb6;
+  font-size: 0.95rem;
+}
+
+.topGrid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 1.2rem;
+  animation: fadeInUp 0.6s ease 0.1s both;
+}
+
+.ringCard {
+  background: #12141a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 1.5rem;
+}
+
+.ring {
+  --pct: 0;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: conic-gradient(#ff8a3d calc(var(--pct) * 1%), rgba(255, 255, 255, 0.08) 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: ringGrow 1.2s ease both;
+}
+
+.ringInner {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: #12141a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ringNumber {
+  font-size: 1.9rem;
+  font-weight: 800;
+}
+
+.ringLabel {
+  font-size: 0.72rem;
+  color: #8f929e;
+}
+
+.ringPct {
+  color: #ff8a3d;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.miniStats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.miniCard {
+  background: #12141a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.miniCard:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 138, 61, 0.4);
+}
+
+.miniIcon {
+  font-size: 1.2rem;
+}
+
+.miniLabel {
+  font-size: 0.72rem;
+  color: #8f929e;
+}
+
+.miniValue {
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.midGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  animation: fadeInUp 0.6s ease 0.2s both;
+}
+
+.card {
+  background: #12141a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+
+.cardHeading {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 1.2rem;
+}
+
+.barRow {
+  margin-bottom: 1rem;
+}
+
+.barLabelRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+  font-size: 0.82rem;
+}
+
+.barLabel {
+  font-weight: 700;
+}
+
+.barValue {
+  color: #8f929e;
+  font-family: monospace;
+}
+
+.barTrack {
+  height: 7px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  border-radius: 6px;
+  width: 0;
+  animation: barGrow 1s ease forwards;
+}
+
+.heatmapGrid {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.heatmapColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.heatmapCell {
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.heatmapCell[data-level="1"] { background: #3a2a1c; }
+.heatmapCell[data-level="2"] { background: #8a5a2c; }
+.heatmapCell[data-level="3"] { background: #ff8a3d; }
+.heatmapCell[data-level="4"] { background: #ff4d8d; }
+
+.heatmapLegend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 0.8rem;
+  color: #8f929e;
+  font-size: 0.7rem;
+}
+
+.chartSvg {
+  width: 100%;
+  height: 160px;
+}
+
+.chartArea {
+  fill: rgba(255, 138, 61, 0.15);
+  stroke: none;
+}
+
+.chartLine {
+  fill: none;
+  stroke: #ff8a3d;
+  stroke-width: 2;
+}
+
+.chartAxis {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: #8f929e;
+  margin-top: 0.5rem;
+}
+
+.recentRow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease;
+}
+
+.recentRow:last-child {
+  border-bottom: none;
+}
+
+.recentRow:hover {
+  transform: translateX(3px);
+}
+
+.recentCheck {
+  color: #4ade80;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.recentTitle {
+  flex: 1;
+  font-size: 0.85rem;
+}
+
+.recentTime {
+  font-size: 0.72rem;
+  color: #8f929e;
+  white-space: nowrap;
+}
+
+.badgeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 1rem;
+}
+
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 1.2rem 0.8rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  opacity: 0.4;
+  transition: transform 0.3s ease, opacity 0.3s ease, border-color 0.3s ease;
+}
+
+.badge[data-active="true"] {
+  opacity: 1;
+  border-color: rgba(255, 138, 61, 0.4);
+}
+
+.badge:hover {
+  transform: translateY(-4px);
+}
+
+.badgeIcon {
+  font-size: 1.6rem;
+}
+
+.badgeLabel {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.badgeSub {
+  font-size: 0.7rem;
+  color: #8f929e;
+}
+
+.errorText {
+  color: #8f929e;
+  text-align: center;
+  padding: 2rem 0;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ringGrow {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes barGrow {
+  from { width: 0; }
+}
+
+@media (max-width: 900px) {
+  .topGrid, .midGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .miniStats {
+    grid-template-columns: 1fr 1fr;
+  }
+}

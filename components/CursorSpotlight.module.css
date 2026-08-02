@@ -1,0 +1,25 @@
+.spotlight {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+
+  --spotlight-x: 50%;
+  --spotlight-y: 40%;
+
+ background: radial-gradient(
+  500px circle at var(--spotlight-x) var(--spotlight-y),
+  rgba(249, 115, 22, 0.45) 0%,
+  rgba(249, 115, 22, 0.2) 15%,
+  rgba(168, 85, 247, 0.1) 40%,
+  transparent 65%
+);
+  mix-blend-mode: screen;
+  transition: opacity 0.3s ease;
+}
+
+@media (hover: none) {
+  .spotlight {
+    display: none;
+  }
+}

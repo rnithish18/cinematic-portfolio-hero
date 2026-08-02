@@ -1,0 +1,408 @@
+.aboutSection {
+  position: relative;
+  background: #090a0d;
+  padding: 100px 5% 120px;
+  overflow: hidden;
+}
+
+.bgGlowOne {
+  position: absolute;
+  top: -10%;
+  left: -8%;
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(255, 138, 61, 0.16) 0%, transparent 70%);
+  filter: blur(20px);
+  pointer-events: none;
+  z-index: 0;
+  animation: floatGlow 12s ease-in-out infinite alternate;
+}
+
+.bgGlowTwo {
+  position: absolute;
+  bottom: -15%;
+  right: -10%;
+  width: 560px;
+  height: 560px;
+  background: radial-gradient(circle at 80% 20%, rgba(160, 90, 255, 0.12), transparent 60%);
+  filter: blur(10px);
+  pointer-events: none;
+  z-index: 0;
+  animation: floatGlow 14s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes floatGlow {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(20px, -20px) scale(1.08); }
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 64px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.fadeInLeft {
+  opacity: 0;
+  transform: translateX(-24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fadeInRight {
+  opacity: 0;
+  transform: translateX(24px);
+  transition: opacity 0.7s ease 0.1s, transform 0.7s ease 0.1s;
+}
+.visible .fadeInLeft,
+.visible .fadeInRight {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.photoWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  position: sticky;
+  top: 120px;
+  align-self: start;
+}
+
+/* Gradient glow ring wrapping the photo */
+.photoGlowRing {
+  position: relative;
+  padding: 4px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #e07a3f, #a855f7, #3b82f6);
+  background-size: 200% 200%;
+  animation: gradientShift 6s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.photoStage {
+  background: #090a0d;
+  transition: transform 0.3s ease;
+}
+
+.photoGlowRing:hover .photoStage {
+  transform: scale(1.01);
+}
+
+.photoOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 45%, rgba(9, 10, 13, 0.85) 100%);
+  pointer-events: none;
+}
+
+.clickHint {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(0, 0, 0, 0.4);
+  padding: 4px 10px;
+  border-radius: 999px;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.photoStage:hover .clickHint {
+  opacity: 1;
+}
+
+.photoCaption {
+  position: absolute;
+  bottom: 18px;
+  left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  pointer-events: none;
+}
+
+.captionLine {
+  color: #eee;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+}
+
+.captionLineAccent {
+  color: #e07a3f;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+}
+
+/* Floating skill badges around the photo */
+.floatBadge {
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(20, 20, 24, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  animation: floatBob 4s ease-in-out infinite;
+  z-index: 2;
+}
+
+.badgeTopRight {
+  top: -14px;
+  right: -14px;
+  animation-delay: 0s;
+}
+
+.badgeBottomLeft {
+  bottom: 70px;
+  left: -16px;
+  animation-delay: 1.2s;
+}
+
+.badgeMidRight {
+  top: 45%;
+  right: -18px;
+  animation-delay: 2.2s;
+}
+
+@keyframes floatBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.progressTrack {
+  display: flex;
+  gap: 6px;
+}
+
+.progressDot {
+  flex: 1;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  width: 0%;
+  background: #e07a3f;
+  animation: fillBar linear forwards;
+}
+
+@keyframes fillBar {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+.socialRow {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.socialIconBtn {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 1.2rem;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.socialIconBtn:hover {
+  border-color: #e07a3f;
+  background: rgba(224, 122, 63, 0.12);
+  transform: translateY(-3px);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.eyebrow {
+  color: #e07a3f;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+}
+
+.heading {
+  color: #f2f2f2;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 800;
+  margin: 0;
+}
+
+.headingGradient {
+  background: linear-gradient(90deg, #e07a3f, #a855f7, #3b82f6);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradientShift 6s ease infinite;
+}
+
+.bio {
+  color: #c7c7cc;
+  font-size: 1.05rem;
+  line-height: 1.75;
+  max-width: 700px;
+}
+
+.resumeBtn {
+  display: inline-block;
+  width: fit-content;
+  padding: 12px 26px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #e07a3f, #a855f7);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.resumeBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(168, 85, 247, 0.3);
+}
+
+.skillsWrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  margin-top: 12px;
+}
+
+.skillGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  opacity: 0;
+  transform: translateY(14px);
+  animation: riseIn 0.6s ease forwards;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.skillGroup:hover {
+  border-color: rgba(224, 122, 63, 0.35);
+  background: rgba(224, 122, 63, 0.05);
+}
+
+@keyframes riseIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.skillCategory {
+  color: #e07a3f;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.skillTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.skillTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px 6px 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ddd;
+  font-size: 0.8rem;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.skillTag:hover {
+  background: rgba(224, 122, 63, 0.15);
+  border-color: rgba(224, 122, 63, 0.4);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.skillTagIconCircle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 0.85rem;
+}
+
+.funFacts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.funFactCard {
+  padding: 16px 18px;
+  border-radius: 10px;
+  background: rgba(224, 122, 63, 0.08);
+  border: 1px solid rgba(224, 122, 63, 0.2);
+  color: #e8e8ea;
+  font-size: 0.9rem;
+  opacity: 0;
+  transform: translateY(14px);
+  animation: riseIn 0.6s ease forwards;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.funFactCard:hover {
+  background: rgba(224, 122, 63, 0.14);
+  transform: translateY(-3px);
+}
+
+@media (max-width: 860px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+  .photoWrapper {
+    position: static;
+    max-width: 280px;
+    margin: 0 auto;
+  }
+  .floatBadge {
+    width: 38px;
+    height: 38px;
+    font-size: 1rem;
+  }
+}
