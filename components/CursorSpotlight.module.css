@@ -1,25 +1,25 @@
-.spotlight {
+.trailLayer {
   position: fixed;
   inset: 0;
   z-index: 1;
   pointer-events: none;
+}
 
-  --spotlight-x: 50%;
-  --spotlight-y: 40%;
-
- background: radial-gradient(
-  500px circle at var(--spotlight-x) var(--spotlight-y),
-  rgba(249, 115, 22, 0.45) 0%,
-  rgba(249, 115, 22, 0.2) 15%,
-  rgba(168, 85, 247, 0.1) 40%,
-  transparent 65%
-);
-  mix-blend-mode: screen;
-  transition: opacity 0.3s ease;
+.particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff8a3d;
+  box-shadow: 0 0 6px rgba(255, 138, 61, 0.6);
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  transition: opacity 0.65s ease, transform 0.65s ease;
+  pointer-events: none;
 }
 
 @media (hover: none) {
-  .spotlight {
+  .trailLayer {
     display: none;
   }
 }

@@ -3,11 +3,15 @@
 import { useEffect, useRef } from "react";
 import styles from "./CursorSpotlight.module.css";
 
+interface Particle {
+  el: HTMLDivElement;
+  born: number;
+}
+
 export default function CursorSpotlight() {
-  const spotlightRef = useRef<HTMLDivElement>(null);
-  const targetPos = useRef({ x: 0, y: 0 });
-  const currentPos = useRef({ x: 0, y: 0 });
-  const rafId = useRef<number | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const particlesRef = useRef<Particle[]>([]);
+  const lastSpawnRef = useRef(0);
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
@@ -15,40 +19,54 @@ export default function CursorSpotlight() {
     ).matches;
     if (prefersReducedMotion) return;
 
+    const container = containerRef.current;
+    if (!container) return;
+
+    const SPAWN_INTERVAL = 24;
+    const LIFETIME = 650;
+
+    const spawnParticle = (x: number, y: number) => {
+      const el = document.createElement("div");
+      el.className = styles.particle;
+      el.style.left = `${x}px`;
+      el.style.top = `${y}px`;
+      container.appendChild(el);
+
+      requestAnimationFrame(() => {
+        el.style.opacity = "0";
+        el.style.transform = "translate(-50%, -50%) scale(2.6)";
+      });
+
+      particlesRef.current.push({ el, born: performance.now() });
+    };
+
     const handlePointerMove = (e: PointerEvent) => {
-      targetPos.current = { x: e.clientX, y: e.clientY };
+      const now = performance.now();
+      if (now - lastSpawnRef.current < SPAWN_INTERVAL) return;
+      lastSpawnRef.current = now;
+      spawnParticle(e.clientX, e.clientY);
     };
 
-    const animate = () => {
-      currentPos.current.x +=
-        (targetPos.current.x - currentPos.current.x) * 0.15;
-      currentPos.current.y +=
-        (targetPos.current.y - currentPos.current.y) * 0.15;
-
-      if (spotlightRef.current) {
-        spotlightRef.current.style.setProperty(
-          "--spotlight-x",
-          `${currentPos.current.x}px`
-        );
-        spotlightRef.current.style.setProperty(
-          "--spotlight-y",
-          `${currentPos.current.y}px`
-        );
-      }
-
-      rafId.current = requestAnimationFrame(animate);
-    };
+    const cleanupInterval = setInterval(() => {
+      const now = performance.now();
+      particlesRef.current = particlesRef.current.filter((p) => {
+        if (now - p.born > LIFETIME) {
+          p.el.remove();
+          return false;
+        }
+        return true;
+      });
+    }, 300);
 
     window.addEventListener("pointermove", handlePointerMove);
-    rafId.current = requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener("pointermove", handlePointerMove);
-      if (rafId.current) cancelAnimationFrame(rafId.current);
+      clearInterval(cleanupInterval);
+      particlesRef.current.forEach((p) => p.el.remove());
+      particlesRef.current = [];
     };
   }, []);
 
-  return (
-    <div ref={spotlightRef} className={styles.spotlight} aria-hidden="true" />
-  );
+  return <div ref={containerRef} className={styles.trailLayer} aria-hidden="true" />;
 }
