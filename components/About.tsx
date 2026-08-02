@@ -69,6 +69,8 @@ const skillGroups = [
   { category: "Languages", skills: ["Python", "Java", "JavaScript"] },
 ];
 
+const categories = ["All", ...skillGroups.map((g) => g.category)];
+
 const funFacts = [
   "Full-stack by day, LeetCode grinder by night",
   "Built an AI that talks to farmers in Tamil & English",
@@ -87,6 +89,7 @@ export default function About() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [progressKey, setProgressKey] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<string>("All");
   const sectionRef = useRef<HTMLElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -203,7 +206,8 @@ export default function About() {
 
           <div className={styles.socialRow}>
             
-            <a  href="https://github.com/rnithish18"
+            <a
+              href="https://github.com/rnithish18"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.socialIconBtn}
@@ -211,6 +215,7 @@ export default function About() {
             >
               <SiGithub />
             </a>
+
             
             <a  href="https://www.linkedin.com/in/r-nithish-181206n/"
               target="_blank"
@@ -220,6 +225,7 @@ export default function About() {
             >
               <FaLinkedin style={{ color: "#0A66C2" }} />
             </a>
+
             
             <a  href="mailto:rnithish18122006@gmail.com"
               className={styles.socialIconBtn}
@@ -251,26 +257,44 @@ export default function About() {
             Download Resume
           </a>
 
-          <div className={styles.skillsWrapper}>
-            {skillGroups.map((group, idx) => (
-              <div
-                key={group.category}
-                className={styles.skillGroup}
-                style={{ animationDelay: `${idx * 0.08}s` }}
+          <div className={styles.filterRow}>
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                className={`${styles.filterBtn} ${
+                  activeCategory === cat ? styles.filterBtnActive : ""
+                }`}
+                onClick={() => setActiveCategory(cat)}
               >
-                <h3 className={styles.skillCategory}>{group.category}</h3>
-                <div className={styles.skillTags}>
-                  {group.skills.map((skill) => (
-                    <span key={skill} className={styles.skillTag}>
-                      <span className={styles.skillTagIconCircle}>
-                        {skillIconMap[skill] ?? null}
-                      </span>
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
+                {cat}
+              </button>
             ))}
+          </div>
+
+          <div className={styles.skillsWrapper}>
+            {skillGroups
+              .filter(
+                (group) => activeCategory === "All" || group.category === activeCategory
+              )
+              .map((group, idx) => (
+                <div
+                  key={group.category}
+                  className={styles.skillGroup}
+                  style={{ animationDelay: `${idx * 0.08}s` }}
+                >
+                  <h3 className={styles.skillCategory}>{group.category}</h3>
+                  <div className={styles.skillTags}>
+                    {group.skills.map((skill) => (
+                      <span key={skill} className={styles.skillTag}>
+                        <span className={styles.skillTagIconCircle}>
+                          {skillIconMap[skill] ?? null}
+                        </span>
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
           </div>
 
           <div className={styles.funFacts}>
