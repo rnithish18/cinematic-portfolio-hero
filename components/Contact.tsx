@@ -1,4 +1,5 @@
 import styles from "./Contact.module.css";
+import MagneticButton from "@/components/MagneticButton";
 
 const icons = {
   whatsapp: (
@@ -88,7 +89,7 @@ export default function Contact() {
           <div className={styles.list}>
             {channels.map((c) => {
               const Wrapper = c.href ? "a" : "div";
-              return (
+              const row = (
                 <Wrapper
                   key={c.label}
                   {...(c.href ? { href: c.href, target: "_blank", rel: "noopener noreferrer" } : {})}
@@ -106,29 +107,39 @@ export default function Contact() {
                   {c.href && <span className={styles.arrow}>→</span>}
                 </Wrapper>
               );
+
+              // Only apply the magnetic pull to clickable rows (skip Location, which has no link)
+              return c.href ? (
+                <MagneticButton key={c.label} className={styles.magneticWrap} strength={0.08}>
+                  {row}
+                </MagneticButton>
+              ) : (
+                row
+              );
             })}
 
             {minorChannels.map((c) => (
-            <a  
-                key={c.label}
-                href={c.href === null ? undefined : c.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${styles.row} ${styles.minorRow}`}
-              >
-                <div className={styles.rowLeft}>
-                  <div className={`${styles.iconBadge} ${styles[c.icon]}`}>
-                    {icons[c.icon as keyof typeof icons]}
+              <MagneticButton key={c.label} className={styles.magneticWrap} strength={0.08}>
+                <a
+                  href={c.href === null ? undefined : c.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${styles.row} ${styles.minorRow}`}
+                >
+                  <div className={styles.rowLeft}>
+                    <div className={`${styles.iconBadge} ${styles[c.icon]}`}>
+                      {icons[c.icon as keyof typeof icons]}
+                    </div>
+                    <div className={styles.textCol}>
+                      <span className={styles.rowLabel}>
+                        {c.label} {c.note && <span className={styles.note}>({c.note})</span>}
+                      </span>
+                      <span className={styles.rowValue}>{c.value}</span>
+                    </div>
                   </div>
-                  <div className={styles.textCol}>
-                    <span className={styles.rowLabel}>
-                      {c.label} {c.note && <span className={styles.note}>({c.note})</span>}
-                    </span>
-                    <span className={styles.rowValue}>{c.value}</span>
-                  </div>
-                </div>
-                <span className={styles.arrow}>→</span>
-              </a>
+                  <span className={styles.arrow}>→</span>
+                </a>
+              </MagneticButton>
             ))}
           </div>
         </div>

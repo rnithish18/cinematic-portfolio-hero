@@ -4,6 +4,7 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import gsap from "gsap";
 import CinematicLayer from "./CinematicLayer";
 import styles from "./VideoIntro.module.css";
+import MagneticButton from "./MagneticButton";
 
 export default function VideoIntro({
   videoSrc = "/hero-video.mp4",
@@ -237,17 +238,19 @@ export default function VideoIntro({
         </button>
       </div>
 
-      <button
-        ref={scrollIndRef}
-        className={styles.scrollIndicator}
-        onClick={scrollToNext}
-        aria-label="Scroll to projects section"
-      >
-        <span className={styles.scrollText}>SCROLL</span>
-        <div className={styles.scrollLineContainer}>
-          <div className={styles.scrollLinePulse} />
-        </div>
-      </button>
+      <MagneticButton strength={0.25}>
+        <button
+          ref={scrollIndRef}
+          className={styles.scrollIndicator}
+          onClick={scrollToNext}
+          aria-label="Scroll to projects section"
+        >
+          <span className={styles.scrollText}>SCROLL</span>
+          <div className={styles.scrollLineContainer}>
+            <div className={styles.scrollLinePulse} />
+          </div>
+        </button>
+      </MagneticButton>
     </section>
   );
 }

@@ -263,4 +263,7 @@
   .rowValue {
     max-width: 160px;
   }
+}.magneticWrap {
+  display: block !important;
+  width: 100%;
 }
