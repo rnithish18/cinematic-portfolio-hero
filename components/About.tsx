@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import styles from "./About.module.css";
 import {
   SiReact,
@@ -21,6 +22,25 @@ import {
   FaBolt,
   FaCloud,
   FaLinkedin,
+  FaGraduationCap,
+  FaBriefcase,
+  FaTimes,
+  FaSchool,
+  FaKeyboard,
+  FaChartLine,
+  FaMapMarkerAlt,
+  FaCalendarAlt,
+  FaBookOpen,
+  FaPen,
+  FaTrophy,
+  FaArrowRight,
+  FaArrowLeft,
+  FaVolumeMute,
+  FaVolumeUp,
+  FaExpandAlt,
+  FaLaptopCode,
+  FaRocket,
+  FaMedal,
 } from "react-icons/fa";
 
 const photos = [
@@ -78,11 +98,202 @@ const funFacts = [
   "Ships side projects faster than coffee gets cold",
 ];
 
-// Floating badges shown around the photo
 const floatingBadges = [
   { icon: <SiReact style={{ color: "#61DAFB" }} />, position: styles.badgeTopRight },
   { icon: <SiPython style={{ color: "#3776AB" }} />, position: styles.badgeBottomLeft },
   { icon: <FaJava style={{ color: "#EA2D2E" }} />, position: styles.badgeMidRight },
+];
+
+interface MarksheetImage {
+  label: string;
+  src: string;
+}
+
+interface HeroStat {
+  icon: ReactNode;
+  label: string;
+  value: string;
+}
+
+interface JourneyStep {
+  icon: ReactNode;
+  text: string;
+}
+
+interface TimelineEntry {
+  id: string;
+  year: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  icon: ReactNode;
+  marksheet?: string;
+  marksheets?: MarksheetImage[];
+
+  // Hero-variant fields (10th, 11th, 12th, College)
+  heroBackground?: string;
+  heroStats?: HeroStat[];
+  journeySteps?: JourneyStep[];
+  journeyLabel?: string;
+  quote?: { text: string; author: string };
+
+  // Video-variant field (Typewriting)
+  video?: string;
+}
+
+// Career / education timeline — chronological, oldest to newest
+const TIMELINE: TimelineEntry[] = [
+  {
+    id: "t1",
+    year: "2021 — 2022",
+    title: "10th Grade",
+    subtitle: "Sarojini Vidhalaya Matric Higher Secondary School, Namakkal",
+    description: "Completed SSLC (10th grade) with an aggregate of 77.5%.",
+    icon: <FaGraduationCap />,
+    marksheet: "/marksheets/10th-marksheet.jpg",
+    heroBackground: "/timeline-bg/school-10th.jpg",
+    journeyLabel: "MY JOURNEY",
+    heroStats: [
+      { icon: <FaChartLine />, label: "AGGREGATE", value: "77.5%" },
+      { icon: <FaSchool />, label: "SCHOOL", value: "SVMHSS Namakkal" },
+      { icon: <FaMapMarkerAlt />, label: "LOCATION", value: "Namakkal, Tamil Nadu" },
+      { icon: <FaCalendarAlt />, label: "ACADEMIC YEAR", value: "2021 – 2022" },
+    ],
+    journeySteps: [
+      { icon: <FaBookOpen />, text: "Started my secondary education" },
+      { icon: <FaPen />, text: "Dedicated hard work and consistent learning" },
+      { icon: <FaTrophy />, text: "Achieved 77.5% in 10th Board Exams" },
+      { icon: <FaArrowRight />, text: "Moved forward to higher secondary" },
+    ],
+    quote: {
+      text: "Education is the most powerful weapon which you can use to change the world.",
+      author: "Nelson Mandela",
+    },
+  },
+  {
+    id: "t2",
+    year: "2022 — 2024",
+    title: "11th Grade",
+    subtitle: "Sarojini Vidhalaya Matric Higher Secondary School, Namakkal",
+    description: "Completed 11th grade with an aggregate of 82.3%.",
+    icon: <FaSchool />,
+    marksheet: "/marksheets/12th-marksheet.jpg",
+    heroBackground: "/timeline-bg/school-11-12.jpg",
+    journeyLabel: "MY JOURNEY",
+    heroStats: [
+      { icon: <FaChartLine />, label: "AGGREGATE", value: "82.3%" },
+      { icon: <FaSchool />, label: "SCHOOL", value: "SVMHSS Namakkal" },
+      { icon: <FaMapMarkerAlt />, label: "LOCATION", value: "Namakkal, Tamil Nadu" },
+      { icon: <FaCalendarAlt />, label: "ACADEMIC YEAR", value: "2022 – 2024" },
+    ],
+    journeySteps: [
+      { icon: <FaBookOpen />, text: "Continued my academic growth" },
+      { icon: <FaPen />, text: "Focused on learning and self improvement" },
+      { icon: <FaTrophy />, text: "Achieved 82.3% in 11th & 12th" },
+      { icon: <FaArrowRight />, text: "Pushed forward for excellence" },
+    ],
+    quote: {
+      text: "The future depends on what you do today.",
+      author: "Mahatma Gandhi",
+    },
+  },
+  {
+    id: "t2b",
+    year: "2022 — 2024",
+    title: "12th Grade",
+    subtitle: "Sarojini Vidhalaya Matric Higher Secondary School, Namakkal",
+    description: "Completed higher secondary education (12th grade) with an aggregate of 82.3%.",
+    icon: <FaSchool />,
+    marksheet: "/marksheets/12th-marksheet.jpg",
+    heroBackground: "/timeline-bg/school-11-12.jpg",
+    journeyLabel: "MY JOURNEY",
+    heroStats: [
+      { icon: <FaChartLine />, label: "AGGREGATE", value: "82.3%" },
+      { icon: <FaSchool />, label: "SCHOOL", value: "SVMHSS Namakkal" },
+      { icon: <FaMapMarkerAlt />, label: "LOCATION", value: "Namakkal, Tamil Nadu" },
+      { icon: <FaCalendarAlt />, label: "ACADEMIC YEAR", value: "2022 – 2024" },
+    ],
+    journeySteps: [
+      { icon: <FaBookOpen />, text: "Strengthened my knowledge" },
+      { icon: <FaPen />, text: "Consistent effort and discipline" },
+      { icon: <FaTrophy />, text: "Achieved 82.3% in 11th & 12th" },
+      { icon: <FaArrowRight />, text: "Ready for the next chapter" },
+    ],
+    quote: {
+      text: "Go confidently in the direction of your dreams.",
+      author: "Henry David Thoreau",
+    },
+  },
+  {
+    id: "t2c",
+    year: "2021 — 2023",
+    title: "Typewriting Certifications",
+    subtitle: "Govt. of Tamil Nadu · Dept. of Technical Education",
+    description:
+      "Passed three Government Technical Examinations in typewriting — English Junior (30 WPM), English Senior (45 WPM), and Tamil Junior (30 WPM) — all First Class with Distinction.",
+    icon: <FaKeyboard />,
+    video: "/videos/typewriter-nr-logo.mp4",
+    marksheets: [
+      {
+        label: "English Junior · 30 WPM · Sep 2021",
+        src: "/marksheets/typewriting-english-junior.jpg",
+      },
+      {
+        label: "English Senior · 45 WPM · Aug 2022",
+        src: "/marksheets/typewriting-english-senior.jpg",
+      },
+      {
+        label: "Tamil Junior · 30 WPM · Feb 2023",
+        src: "/marksheets/typewriting-tamil-junior.jpg",
+      },
+    ],
+  },
+  {
+    id: "t3",
+    year: "2024 — Present",
+    title: "B.E. Computer Science and Engineering",
+    subtitle: "V.S.B Engineering College, Karur",
+    description:
+      "Coursework and projects centered on algorithms, databases, and software engineering, alongside independent AI/full-stack builds. Expected graduation 2028.",
+    icon: <FaGraduationCap />,
+    marksheet: "/marksheets/college-cgpa.jpg",
+    heroBackground: "/timeline-bg/college.jpg",
+    journeyLabel: "MY COLLEGE JOURNEY",
+    heroStats: [
+      { icon: <FaChartLine />, label: "CGPA (CURRENT)", value: "7.8" },
+      { icon: <FaCalendarAlt />, label: "ACADEMIC YEAR", value: "2024 – 2025" },
+      { icon: <FaBookOpen />, label: "DEPARTMENT", value: "CSE" },
+      { icon: <FaMedal />, label: "OVERALL STATUS", value: "Good Standing" },
+    ],
+    journeySteps: [
+      { icon: <FaSchool />, text: "Joined the journey — began my engineering journey with big dreams" },
+      { icon: <FaLaptopCode />, text: "Learning & exploring — diving deep into code, concepts & creativity" },
+      { icon: <FaTrophy />, text: "Building skills — working on projects, gaining real-world exposure" },
+      { icon: <FaRocket />, text: "Future ready — committed to innovation and meaningful impact" },
+    ],
+    quote: {
+      text: "The best way to predict the future is to create it.",
+      author: "Peter Drucker",
+    },
+  },
+  {
+    id: "t4",
+    year: "July 2025",
+    title: "Python Foundation Intern",
+    subtitle: "Infosys Springboard",
+    description:
+      "Validated core industrial Python backend development concepts, working through programmatic sequences and algorithmic data parsing structures.",
+    icon: <FaBriefcase />,
+  },
+  {
+    id: "t5",
+    year: "2026",
+    title: "AI-Powered Farming Assistant",
+    subtitle: "FastAPI · Groq LLaMA 3.3 70B · Qwen Vision",
+    description:
+      "Built a bilingual (English/Tamil) AI assistant with voice input and 15+ modules — crop disease diagnosis, weather advisory, market prices — deployed on Render for the Hack2Skill Ideathon.",
+    icon: <FaBrain />,
+  },
 ];
 
 export default function About() {
@@ -92,6 +303,15 @@ export default function About() {
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const sectionRef = useRef<HTMLElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const [visibleTimelineIds, setVisibleTimelineIds] = useState<Set<string>>(new Set());
+  const timelineRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const [selectedEntry, setSelectedEntry] = useState<TimelineEntry | null>(null);
+  const [mounted, setMounted] = useState(false);
+  const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
+  const [videoMuted, setVideoMuted] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const goToNext = () => {
     setActiveIndex((prev) => (prev + 1) % photos.length);
@@ -129,6 +349,55 @@ export default function About() {
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const id = entry.target.getAttribute("data-id");
+            if (id) setVisibleTimelineIds((prev) => new Set(prev).add(id));
+          }
+        });
+      },
+      { threshold: 0.25, rootMargin: "0px 0px -60px 0px" }
+    );
+    timelineRefs.current.forEach((el) => el && observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (selectedEntry || lightboxSrc) {
+      document.body.style.overflow = "hidden";
+      const onKey = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          if (lightboxSrc) setLightboxSrc(null);
+          else setSelectedEntry(null);
+        }
+      };
+      window.addEventListener("keydown", onKey);
+      return () => {
+        document.body.style.overflow = "";
+        window.removeEventListener("keydown", onKey);
+      };
+    }
+  }, [selectedEntry, lightboxSrc]);
+
+  useEffect(() => {
+    setVideoMuted(true);
+  }, [selectedEntry]);
+
+  const closeModal = () => {
+    setSelectedEntry(null);
+    setLightboxSrc(null);
+  };
+
+  const isHero = !!selectedEntry?.heroBackground;
+  const isVideo = !!selectedEntry?.video;
 
   return (
     <section
@@ -206,8 +475,7 @@ export default function About() {
 
           <div className={styles.socialRow}>
             
-            <a
-              href="https://github.com/rnithish18"
+            <a  href="https://github.com/rnithish18"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.socialIconBtn}
@@ -310,6 +578,330 @@ export default function About() {
           </div>
         </div>
       </div>
+
+      {/* Career / education timeline */}
+      <div className={styles.timelineSection}>
+        <div className={styles.timelineHeader}>
+          <span className={styles.eyebrow}>MY JOURNEY</span>
+          <h2 className={styles.heading}>
+            How I <span className={styles.headingGradient}>Got Here</span>
+          </h2>
+        </div>
+
+        <div className={styles.timeline}>
+          <div className={styles.timelineLine} />
+          {TIMELINE.map((item, index) => (
+            <div
+              key={item.id}
+              ref={(el) => {
+                timelineRefs.current[index] = el;
+              }}
+              data-id={item.id}
+              className={`${styles.timelineItem} ${
+                index % 2 === 0 ? styles.timelineLeft : styles.timelineRight
+              } ${visibleTimelineIds.has(item.id) ? styles.timelineVisible : ""}`}
+            >
+              <div className={styles.timelineDot}>{item.icon}</div>
+              <button
+                type="button"
+                className={styles.timelinePanel}
+                data-cursor-label="View details"
+                onClick={() => setSelectedEntry(item)}
+              >
+                <span className={styles.year}>{item.year}</span>
+                <h3 className={styles.timelineTitle}>{item.title}</h3>
+                <p className={styles.timelineSubtitle}>{item.subtitle}</p>
+                <p className={styles.timelineDescription}>{item.description}</p>
+                <span className={styles.viewDetailsHint}>View details →</span>
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {mounted &&
+        selectedEntry &&
+        createPortal(
+          <>
+            {/* ============ HERO VARIANT — school + college ============ */}
+            {isHero && (
+              <div className={styles.heroModalOverlay} onClick={closeModal}>
+                <div
+                  className={styles.heroModalPanel}
+                  onClick={(e) => e.stopPropagation()}
+                  style={{ backgroundImage: `url(${selectedEntry.heroBackground})` }}
+                >
+                  <div className={styles.heroDimOverlay} aria-hidden="true" />
+
+                  <button
+                    type="button"
+                    className={styles.backBtn}
+                    onClick={closeModal}
+                    aria-label="Back to timeline"
+                  >
+                    <FaArrowLeft /> <span>Back</span>
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.modalClose}
+                    onClick={closeModal}
+                    aria-label="Close"
+                  >
+                    <FaTimes />
+                  </button>
+
+                  <div className={styles.heroInfoCard}>
+                    <div className={styles.modalIcon}>{selectedEntry.icon}</div>
+                    <span className={styles.year}>{selectedEntry.year}</span>
+                    <h3 className={styles.heroTitle}>{selectedEntry.title}</h3>
+                    <p className={styles.heroSubtitle}>{selectedEntry.subtitle}</p>
+
+                    {selectedEntry.heroStats && (
+                      <div className={styles.heroStatsGrid}>
+                        {selectedEntry.heroStats.map((s) => (
+                          <div key={s.label} className={styles.heroStatItem}>
+                            <div className={styles.heroStatIcon}>{s.icon}</div>
+                            <span className={styles.heroStatLabel}>{s.label}</span>
+                            <span className={styles.heroStatValue}>{s.value}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {selectedEntry.journeySteps && (
+                      <div className={styles.heroJourney}>
+                        <span className={styles.heroJourneyLabel}>
+                          {selectedEntry.journeyLabel ?? "MY JOURNEY"}
+                        </span>
+                        <div className={styles.heroJourneySteps}>
+                          {selectedEntry.journeySteps.map((step, i) => (
+                            <div key={i} className={styles.heroJourneyStepWrap}>
+                              <div className={styles.heroJourneyStep}>
+                                <div className={styles.heroJourneyIcon}>{step.icon}</div>
+                                <p>{step.text}</p>
+                              </div>
+                              {i < selectedEntry.journeySteps!.length - 1 && (
+                                <div className={styles.heroJourneyConnector} />
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {selectedEntry.quote && (
+                      <blockquote className={styles.heroQuote}>
+                        <span>&ldquo;{selectedEntry.quote.text}&rdquo;</span>
+                        — {selectedEntry.quote.author}
+                      </blockquote>
+                    )}
+                  </div>
+
+                  {selectedEntry.marksheet && (
+                    <div className={styles.heroMarksheetCard}>
+                      <span className={styles.heroMarksheetLabel}>Marksheet</span>
+                      <img
+                        src={selectedEntry.marksheet}
+                        alt={`${selectedEntry.title} marksheet`}
+                        className={styles.heroMarksheetImg}
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          target.style.display = "none";
+                          const fallback = target.nextElementSibling as HTMLElement | null;
+                          if (fallback) fallback.style.display = "flex";
+                        }}
+                      />
+                      <div className={styles.heroMarksheetFallback} style={{ display: "none" }}>
+                        Marksheet not uploaded yet
+                      </div>
+                      <button
+                        type="button"
+                        className={styles.heroMarksheetBtn}
+                        onClick={() => setLightboxSrc(selectedEntry.marksheet!)}
+                      >
+                        <FaExpandAlt /> View Full Marksheet
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* ============ VIDEO VARIANT — Typewriting ============ */}
+            {isVideo && (
+              <div className={styles.modalOverlay} onClick={closeModal}>
+                <div
+                  className={`${styles.modalPanel} ${styles.videoModalPanel}`}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <video
+                    ref={videoRef}
+                    className={styles.videoBg}
+                    src={selectedEntry.video}
+                    autoPlay
+                    loop
+                    muted={videoMuted}
+                    playsInline
+                  />
+                  <div className={styles.videoDimOverlay} aria-hidden="true" />
+
+                  <button
+                    type="button"
+                    className={styles.backBtnCompact}
+                    onClick={closeModal}
+                    aria-label="Back to timeline"
+                  >
+                    <FaArrowLeft />
+                  </button>
+
+                  <button
+                    type="button"
+                    className={styles.modalClose}
+                    onClick={closeModal}
+                    aria-label="Close"
+                  >
+                    <FaTimes />
+                  </button>
+
+                  <button
+                    type="button"
+                    className={styles.muteToggle}
+                    onClick={() => setVideoMuted((m) => !m)}
+                    aria-label={videoMuted ? "Unmute video" : "Mute video"}
+                  >
+                    {videoMuted ? <FaVolumeMute /> : <FaVolumeUp />}
+                  </button>
+
+                  <div className={styles.videoContent}>
+                    <div className={styles.modalIcon}>{selectedEntry.icon}</div>
+                    <span className={styles.year}>{selectedEntry.year}</span>
+                    <h3 className={styles.modalTitle}>{selectedEntry.title}</h3>
+                    <p className={styles.modalSubtitle}>{selectedEntry.subtitle}</p>
+                    <p className={styles.modalDescription}>{selectedEntry.description}</p>
+
+                    {selectedEntry.marksheets && selectedEntry.marksheets.length > 0 && (
+                      <div className={styles.modalMarksheet}>
+                        <span className={styles.modalMarksheetLabel}>Certificates</span>
+                        <div className={styles.modalMarksheetGrid}>
+                          {selectedEntry.marksheets.map((m) => (
+                            <div key={m.src} className={styles.modalMarksheetItem}>
+                              <img
+                                src={m.src}
+                                alt={m.label}
+                                className={styles.modalMarksheetImg}
+                                onClick={() => setLightboxSrc(m.src)}
+                                onError={(e) => {
+                                  const target = e.currentTarget;
+                                  target.style.display = "none";
+                                  const fallback =
+                                    target.nextElementSibling as HTMLElement | null;
+                                  if (fallback) fallback.style.display = "block";
+                                }}
+                              />
+                              <div
+                                className={styles.modalMarksheetFallback}
+                                style={{ display: "none" }}
+                              >
+                                {m.label} — image not uploaded yet
+                              </div>
+                              <span className={styles.modalMarksheetItemCaption}>
+                                {m.label}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ============ COMPACT VARIANT — internship, project ============ */}
+            {!isHero && !isVideo && (
+              <div className={styles.modalOverlay} onClick={closeModal}>
+                <div className={styles.modalPanel} onClick={(e) => e.stopPropagation()}>
+                  <button
+                    type="button"
+                    className={styles.backBtnCompact}
+                    onClick={closeModal}
+                    aria-label="Back to timeline"
+                  >
+                    <FaArrowLeft />
+                  </button>
+
+                  <button
+                    type="button"
+                    className={styles.modalClose}
+                    onClick={closeModal}
+                    aria-label="Close"
+                  >
+                    <FaTimes />
+                  </button>
+
+                  <div className={styles.modalIcon}>{selectedEntry.icon}</div>
+                  <span className={styles.year}>{selectedEntry.year}</span>
+                  <h3 className={styles.modalTitle}>{selectedEntry.title}</h3>
+                  <p className={styles.modalSubtitle}>{selectedEntry.subtitle}</p>
+                  <p className={styles.modalDescription}>{selectedEntry.description}</p>
+
+                  {selectedEntry.marksheet && (
+                    <div className={styles.modalMarksheet}>
+                      <span className={styles.modalMarksheetLabel}>Marksheet</span>
+                      <img
+                        src={selectedEntry.marksheet}
+                        alt={`${selectedEntry.title} marksheet`}
+                        className={styles.modalMarksheetImg}
+                        onClick={() => setLightboxSrc(selectedEntry.marksheet!)}
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          target.style.display = "none";
+                          const fallback = target.nextElementSibling as HTMLElement | null;
+                          if (fallback) fallback.style.display = "block";
+                        }}
+                      />
+                      <div className={styles.modalMarksheetFallback} style={{ display: "none" }}>
+                        Marksheet image not uploaded yet
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </>,
+          document.body
+        )}
+
+      {mounted &&
+        lightboxSrc &&
+        createPortal(
+          <div className={styles.lightboxOverlay} onClick={() => setLightboxSrc(null)}>
+            <button
+              type="button"
+              className={styles.backBtnCompact}
+              onClick={() => setLightboxSrc(null)}
+              aria-label="Back"
+              style={{ left: 18 }}
+            >
+              <FaArrowLeft />
+            </button>
+            <button
+              type="button"
+              className={styles.modalClose}
+              onClick={() => setLightboxSrc(null)}
+              aria-label="Close"
+            >
+              <FaTimes />
+            </button>
+            <img
+              src={lightboxSrc}
+              alt="Marksheet full view"
+              className={styles.lightboxImg}
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>,
+          document.body
+        )}
     </section>
   );
 }
