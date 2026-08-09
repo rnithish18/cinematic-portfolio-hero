@@ -593,6 +593,19 @@
   opacity: 0.85;
 }
 
+/* Year label — used everywhere (timeline cards + all modal variants).
+   Made brighter/bolder with a subtle glow so it's readable on both
+   the dark card background and the photo/video hero backgrounds. */
+.year {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #ffb066;
+  text-shadow: 0 0 12px rgba(255, 138, 61, 0.5);
+  margin-bottom: 2px;
+}
+
 /* ===================== Back / Close buttons (shared) ===================== */
 
 .backBtn {
@@ -809,7 +822,7 @@
   }
 }
 
-/* ===================== Hero Modal (school + college) ===================== */
+/* ===================== Hero Modal (school + college + video) ===================== */
 
 .heroModalOverlay {
   position: fixed;
@@ -852,6 +865,15 @@
   z-index: 1;
 }
 
+.heroDimOverlayLight {
+  background: linear-gradient(
+    120deg,
+    rgba(5, 5, 6, 0.32) 0%,
+    rgba(5, 5, 6, 0.08) 45%,
+    rgba(5, 5, 6, 0.02) 100%
+  );
+}
+
 .heroInfoCard {
   position: relative;
   z-index: 2;
@@ -864,6 +886,15 @@
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+  transition: background 0.2s ease;
+}
+
+/* Lighter/more see-through variant, used for the college entry */
+.heroCardTransparent {
+  background: rgba(10, 10, 12, 0.32);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 .heroTitle {
@@ -876,7 +907,7 @@
 
 .heroSubtitle {
   font-size: 0.92rem;
-  color: #c9c9cf;
+  color: #dcdce0;
   line-height: 1.5;
   margin-bottom: 22px;
 }
@@ -886,7 +917,7 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
   padding-top: 18px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
   margin-bottom: 22px;
 }
 
@@ -904,9 +935,9 @@
   align-items: center;
   justify-content: center;
   font-size: 0.85rem;
-  color: #e07a3f;
-  border: 1px solid rgba(224, 122, 63, 0.4);
-  background: rgba(224, 122, 63, 0.1);
+  color: #ffb066;
+  border: 1px solid rgba(224, 122, 63, 0.45);
+  background: rgba(224, 122, 63, 0.12);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -919,18 +950,18 @@
   font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.08em;
-  color: #999;
+  color: #ccc;
 }
 
 .heroStatValue {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #f2f2f2;
+  color: #fff;
 }
 
 .heroJourney {
   padding-top: 18px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
   margin-bottom: 22px;
 }
 
@@ -939,7 +970,7 @@
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.1em;
-  color: #e07a3f;
+  color: #ffb066;
   margin-bottom: 14px;
 }
 
@@ -967,7 +998,7 @@
 .heroJourneyStep p {
   font-size: 0.66rem;
   line-height: 1.35;
-  color: #b5b5b5;
+  color: #d5d5d9;
   max-width: 92px;
 }
 
@@ -1000,7 +1031,7 @@
 
 .heroQuote {
   padding-top: 18px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
   margin: 0;
 }
 
@@ -1008,7 +1039,7 @@
   display: block;
   font-size: 0.85rem;
   font-style: italic;
-  color: #ddd;
+  color: #eee;
   line-height: 1.5;
   margin-bottom: 6px;
 }
@@ -1016,7 +1047,7 @@
 .heroQuote cite {
   font-size: 0.78rem;
   font-style: normal;
-  color: #e07a3f;
+  color: #ffb066;
   font-weight: 600;
 }
 
@@ -1033,6 +1064,7 @@
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  transition: background 0.2s ease;
 }
 
 .heroMarksheetLabel {
@@ -1041,7 +1073,7 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #e07a3f;
+  color: #ffb066;
   margin-bottom: 10px;
 }
 
@@ -1064,7 +1096,7 @@
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px dashed rgba(255, 255, 255, 0.15);
-  color: #777;
+  color: #999;
   font-size: 0.78rem;
   margin-bottom: 12px;
 }
@@ -1113,15 +1145,24 @@
   }
 }
 
-/* ===================== Video Modal (Typewriting) ===================== */
+/* ===================== Video Modal (Typewriting) — full screen, reuses hero panel scale ===================== */
 
-.videoModalPanel {
-  max-width: 640px;
-  padding: 0;
+/* ===================== Video Modal (Typewriting) — true fixed background, scrolls content on top ===================== */
+
+.videoHeroWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  height: 90vh;
+  border-radius: 24px;
   overflow: hidden;
+  animation: riseInModal 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(224, 122, 63, 0.08);
+  background: #000;
 }
 
-.videoBg {
+.videoBgFull {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -1130,20 +1171,22 @@
   z-index: 0;
 }
 
-.videoDimOverlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(5, 5, 6, 0.55) 0%, rgba(5, 5, 6, 0.88) 70%);
-  z-index: 1;
-}
-
-.videoContent {
+.videoScrollArea {
   position: relative;
   z-index: 2;
-  padding: 40px 36px 36px;
+  height: 100%;
+  overflow-y: auto;
+  padding: 68px 36px 36px;
 }
 
-.muteToggle {
+.videoDescription {
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: #dcdce0;
+  margin-bottom: 4px;
+}
+
+.muteToggleFull {
   position: absolute;
   top: 18px;
   right: 62px;
@@ -1153,22 +1196,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #ccc;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #eee;
   cursor: pointer;
   z-index: 6;
   transition: background 0.2s ease, color 0.2s ease;
 }
 
-.muteToggle:hover {
-  background: rgba(224, 122, 63, 0.2);
+.muteToggleFull:hover {
+  background: rgba(224, 122, 63, 0.25);
   color: #fff;
 }
 
-@media (max-width: 600px) {
-  .videoContent {
-    padding: 32px 22px 28px;
+@media (max-width: 860px) {
+  .videoHeroWrapper {
+    height: 85vh;
+  }
+  .videoScrollArea {
+    padding: 60px 22px 28px;
   }
 }
 

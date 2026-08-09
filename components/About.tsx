@@ -136,6 +136,7 @@ interface TimelineEntry {
   journeySteps?: JourneyStep[];
   journeyLabel?: string;
   quote?: { text: string; author: string };
+  transparentHero?: boolean; // lighter/more see-through glass cards
 
   // Video-variant field (Typewriting)
   video?: string;
@@ -172,7 +173,7 @@ const TIMELINE: TimelineEntry[] = [
   },
   {
     id: "t2",
-    year: "2022 — 2024",
+    year: "2022 — 2023",
     title: "11th Grade",
     subtitle: "Sarojini Vidhalaya Matric Higher Secondary School, Namakkal",
     description: "Completed 11th grade with an aggregate of 82.3%.",
@@ -184,7 +185,7 @@ const TIMELINE: TimelineEntry[] = [
       { icon: <FaChartLine />, label: "AGGREGATE", value: "82.3%" },
       { icon: <FaSchool />, label: "SCHOOL", value: "SVMHSS Namakkal" },
       { icon: <FaMapMarkerAlt />, label: "LOCATION", value: "Namakkal, Tamil Nadu" },
-      { icon: <FaCalendarAlt />, label: "ACADEMIC YEAR", value: "2022 – 2024" },
+      { icon: <FaCalendarAlt />, label: "ACADEMIC YEAR", value: "2022 – 2023" },
     ],
     journeySteps: [
       { icon: <FaBookOpen />, text: "Continued my academic growth" },
@@ -199,7 +200,7 @@ const TIMELINE: TimelineEntry[] = [
   },
   {
     id: "t2b",
-    year: "2022 — 2024",
+    year: "2023 — 2024",
     title: "12th Grade",
     subtitle: "Sarojini Vidhalaya Matric Higher Secondary School, Namakkal",
     description: "Completed higher secondary education (12th grade) with an aggregate of 82.3%.",
@@ -211,7 +212,7 @@ const TIMELINE: TimelineEntry[] = [
       { icon: <FaChartLine />, label: "AGGREGATE", value: "82.3%" },
       { icon: <FaSchool />, label: "SCHOOL", value: "SVMHSS Namakkal" },
       { icon: <FaMapMarkerAlt />, label: "LOCATION", value: "Namakkal, Tamil Nadu" },
-      { icon: <FaCalendarAlt />, label: "ACADEMIC YEAR", value: "2022 – 2024" },
+      { icon: <FaCalendarAlt />, label: "ACADEMIC YEAR", value: "2023 – 2024" },
     ],
     journeySteps: [
       { icon: <FaBookOpen />, text: "Strengthened my knowledge" },
@@ -259,6 +260,7 @@ const TIMELINE: TimelineEntry[] = [
     marksheet: "/marksheets/college-cgpa.jpg",
     heroBackground: "/timeline-bg/college.jpg",
     journeyLabel: "MY COLLEGE JOURNEY",
+    transparentHero: true,
     heroStats: [
       { icon: <FaChartLine />, label: "CGPA (CURRENT)", value: "7.8" },
       { icon: <FaCalendarAlt />, label: "ACADEMIC YEAR", value: "2024 – 2025" },
@@ -631,7 +633,12 @@ export default function About() {
                   onClick={(e) => e.stopPropagation()}
                   style={{ backgroundImage: `url(${selectedEntry.heroBackground})` }}
                 >
-                  <div className={styles.heroDimOverlay} aria-hidden="true" />
+                  <div
+                    className={`${styles.heroDimOverlay} ${
+                      selectedEntry.transparentHero ? styles.heroDimOverlayLight : ""
+                    }`}
+                    aria-hidden="true"
+                  />
 
                   <button
                     type="button"
@@ -650,7 +657,11 @@ export default function About() {
                     <FaTimes />
                   </button>
 
-                  <div className={styles.heroInfoCard}>
+                  <div
+                    className={`${styles.heroInfoCard} ${
+                      selectedEntry.transparentHero ? styles.heroCardTransparent : ""
+                    }`}
+                  >
                     <div className={styles.modalIcon}>{selectedEntry.icon}</div>
                     <span className={styles.year}>{selectedEntry.year}</span>
                     <h3 className={styles.heroTitle}>{selectedEntry.title}</h3>
@@ -698,7 +709,11 @@ export default function About() {
                   </div>
 
                   {selectedEntry.marksheet && (
-                    <div className={styles.heroMarksheetCard}>
+                    <div
+                      className={`${styles.heroMarksheetCard} ${
+                        selectedEntry.transparentHero ? styles.heroCardTransparent : ""
+                      }`}
+                    >
                       <span className={styles.heroMarksheetLabel}>Marksheet</span>
                       <img
                         src={selectedEntry.marksheet}
@@ -727,31 +742,40 @@ export default function About() {
               </div>
             )}
 
-            {/* ============ VIDEO VARIANT — Typewriting ============ */}
+            {/* ============ VIDEO VARIANT — Typewriting, full-screen ============ */}
             {isVideo && (
-              <div className={styles.modalOverlay} onClick={closeModal}>
+              <div className={styles.heroModalOverlay} onClick={closeModal}>
                 <div
-                  className={`${styles.modalPanel} ${styles.videoModalPanel}`}
+                  className={styles.videoHeroPanel}
                   onClick={(e) => e.stopPropagation()}
                 >
                   <video
                     ref={videoRef}
-                    className={styles.videoBg}
+                    className={styles.videoBgFull}
                     src={selectedEntry.video}
                     autoPlay
                     loop
                     muted={videoMuted}
                     playsInline
                   />
-                  <div className={styles.videoDimOverlay} aria-hidden="true" />
+                  <div className={styles.heroDimOverlay} aria-hidden="true" />
 
                   <button
                     type="button"
-                    className={styles.backBtnCompact}
+                    className={styles.backBtn}
                     onClick={closeModal}
                     aria-label="Back to timeline"
                   >
-                    <FaArrowLeft />
+                    <FaArrowLeft /> <span>Back</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className={styles.muteToggleFull}
+                    onClick={() => setVideoMuted((m) => !m)}
+                    aria-label={videoMuted ? "Unmute video" : "Mute video"}
+                  >
+                    {videoMuted ? <FaVolumeMute /> : <FaVolumeUp />}
                   </button>
 
                   <button
@@ -763,21 +787,12 @@ export default function About() {
                     <FaTimes />
                   </button>
 
-                  <button
-                    type="button"
-                    className={styles.muteToggle}
-                    onClick={() => setVideoMuted((m) => !m)}
-                    aria-label={videoMuted ? "Unmute video" : "Mute video"}
-                  >
-                    {videoMuted ? <FaVolumeMute /> : <FaVolumeUp />}
-                  </button>
-
-                  <div className={styles.videoContent}>
+                  <div className={styles.heroInfoCard}>
                     <div className={styles.modalIcon}>{selectedEntry.icon}</div>
                     <span className={styles.year}>{selectedEntry.year}</span>
-                    <h3 className={styles.modalTitle}>{selectedEntry.title}</h3>
-                    <p className={styles.modalSubtitle}>{selectedEntry.subtitle}</p>
-                    <p className={styles.modalDescription}>{selectedEntry.description}</p>
+                    <h3 className={styles.heroTitle}>{selectedEntry.title}</h3>
+                    <p className={styles.heroSubtitle}>{selectedEntry.subtitle}</p>
+                    <p className={styles.videoDescription}>{selectedEntry.description}</p>
 
                     {selectedEntry.marksheets && selectedEntry.marksheets.length > 0 && (
                       <div className={styles.modalMarksheet}>
