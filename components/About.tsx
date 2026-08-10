@@ -263,7 +263,7 @@ const TIMELINE: TimelineEntry[] = [
     journeyLabel: "MY COLLEGE JOURNEY",
     heroStats: [
       { icon: <FaChartLine />, label: "CGPA (CURRENT)", value: "7.8" },
-      { icon: <FaCalendarAlt />, label: "ACADEMIC YEAR", value: "2024 – 2025" },
+      { icon: <FaCalendarAlt />, label: "ACADEMIC YEAR", value: "2024 – 2028" },
       { icon: <FaBookOpen />, label: "DEPARTMENT", value: "CSE" },
       { icon: <FaMedal />, label: "OVERALL STATUS", value: "Good Standing" },
     ],
