@@ -41,6 +41,7 @@ import {
   FaLaptopCode,
   FaRocket,
   FaMedal,
+  FaInfoCircle,
 } from "react-icons/fa";
 
 const photos = [
@@ -127,19 +128,18 @@ interface TimelineEntry {
   subtitle: string;
   description: string;
   icon: ReactNode;
-  marksheet?: string;
-  marksheets?: MarksheetImage[];
+  marksheet?: string; // single side-card marksheet (10th, 11th, 12th, college)
+  marksheets?: MarksheetImage[]; // inline certificate grid (typewriting)
 
-  // Hero-variant fields (10th, 11th, 12th, College)
+  // Media background — either a photo or a video (video wins if both present;
+  // heroBackground is then used as the video's poster frame)
   heroBackground?: string;
+  video?: string;
+
   heroStats?: HeroStat[];
   journeySteps?: JourneyStep[];
   journeyLabel?: string;
   quote?: { text: string; author: string };
-  transparentHero?: boolean; // lighter/more see-through glass cards
-
-  // Video-variant field (Typewriting)
-  video?: string;
 }
 
 // Career / education timeline — chronological, oldest to newest
@@ -258,9 +258,9 @@ const TIMELINE: TimelineEntry[] = [
       "Coursework and projects centered on algorithms, databases, and software engineering, alongside independent AI/full-stack builds. Expected graduation 2028.",
     icon: <FaGraduationCap />,
     marksheet: "/marksheets/college-cgpa.jpg",
-    heroBackground: "/timeline-bg/college.jpg",
+    heroBackground: "/timeline-bg/college.jpg", // used as video poster while it loads
+    video: "/timeline-bg/college-aerial.mp4",
     journeyLabel: "MY COLLEGE JOURNEY",
-    transparentHero: true,
     heroStats: [
       { icon: <FaChartLine />, label: "CGPA (CURRENT)", value: "7.8" },
       { icon: <FaCalendarAlt />, label: "ACADEMIC YEAR", value: "2024 – 2025" },
@@ -314,6 +314,9 @@ export default function About() {
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
   const [videoMuted, setVideoMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Details (info card + marksheet card) hidden by default; toggled on click
+  const [showDetails, setShowDetails] = useState(false);
 
   const goToNext = () => {
     setActiveIndex((prev) => (prev + 1) % photos.length);
@@ -391,6 +394,7 @@ export default function About() {
 
   useEffect(() => {
     setVideoMuted(true);
+    setShowDetails(false); // reset reveal state whenever a new entry is opened
   }, [selectedEntry]);
 
   const closeModal = () => {
@@ -398,8 +402,8 @@ export default function About() {
     setLightboxSrc(null);
   };
 
-  const isHero = !!selectedEntry?.heroBackground;
-  const isVideo = !!selectedEntry?.video;
+  const hasMedia = !!(selectedEntry?.heroBackground || selectedEntry?.video);
+  const hasVideo = !!selectedEntry?.video;
 
   return (
     <section
@@ -476,8 +480,8 @@ export default function About() {
           </div>
 
           <div className={styles.socialRow}>
-            
-            <a  href="https://github.com/rnithish18"
+            <a
+              href="https://github.com/rnithish18"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.socialIconBtn}
@@ -486,8 +490,8 @@ export default function About() {
               <SiGithub />
             </a>
 
-            
-            <a  href="https://www.linkedin.com/in/r-nithish-181206n/"
+            <a
+              href="https://www.linkedin.com/in/r-nithish-181206n/"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.socialIconBtn}
@@ -496,8 +500,8 @@ export default function About() {
               <FaLinkedin style={{ color: "#0A66C2" }} />
             </a>
 
-            
-            <a  href="mailto:rnithish18122006@gmail.com"
+            <a
+              href="mailto:rnithish18122006@gmail.com"
               className={styles.socialIconBtn}
               aria-label="Email"
             >
@@ -625,20 +629,28 @@ export default function About() {
         selectedEntry &&
         createPortal(
           <>
-            {/* ============ HERO VARIANT — school + college ============ */}
-            {isHero && (
+            {/* ============ MEDIA HERO — photo or video background, transparent glass cards revealed on click ============ */}
+            {hasMedia && (
               <div className={styles.heroModalOverlay} onClick={closeModal}>
-                <div
-                  className={styles.heroModalPanel}
-                  onClick={(e) => e.stopPropagation()}
-                  style={{ backgroundImage: `url(${selectedEntry.heroBackground})` }}
-                >
-                  <div
-                    className={`${styles.heroDimOverlay} ${
-                      selectedEntry.transparentHero ? styles.heroDimOverlayLight : ""
-                    }`}
-                    aria-hidden="true"
-                  />
+                <div className={styles.mediaHeroWrapper} onClick={(e) => e.stopPropagation()}>
+                  {hasVideo ? (
+                    <video
+                      ref={videoRef}
+                      className={styles.mediaBgFull}
+                      src={selectedEntry.video}
+                      poster={selectedEntry.heroBackground}
+                      autoPlay
+                      loop
+                      muted={videoMuted}
+                      playsInline
+                    />
+                  ) : (
+                    <div
+                      className={styles.mediaBgFull}
+                      style={{ backgroundImage: `url(${selectedEntry.heroBackground})` }}
+                    />
+                  )}
+                  <div className={styles.heroDimOverlayLight} aria-hidden="true" />
 
                   <button
                     type="button"
@@ -648,6 +660,31 @@ export default function About() {
                   >
                     <FaArrowLeft /> <span>Back</span>
                   </button>
+
+                  {/* Show/Hide details toggle */}
+                  <button
+                    type="button"
+                    className={`${styles.detailsToggleBtn} ${
+                      showDetails ? styles.detailsToggleBtnActive : ""
+                    }`}
+                    onClick={() => setShowDetails((v) => !v)}
+                    aria-label={showDetails ? "Hide details" : "Show details"}
+                    title={showDetails ? "Hide details" : "Show details"}
+                  >
+                    <FaInfoCircle />
+                  </button>
+
+                  {hasVideo && (
+                    <button
+                      type="button"
+                      className={styles.muteToggleFull}
+                      onClick={() => setVideoMuted((m) => !m)}
+                      aria-label={videoMuted ? "Unmute video" : "Mute video"}
+                    >
+                      {videoMuted ? <FaVolumeMute /> : <FaVolumeUp />}
+                    </button>
+                  )}
+
                   <button
                     type="button"
                     className={styles.modalClose}
@@ -658,60 +695,101 @@ export default function About() {
                   </button>
 
                   <div
-                    className={`${styles.heroInfoCard} ${
-                      selectedEntry.transparentHero ? styles.heroCardTransparent : ""
+                    className={`${styles.heroScrollArea} ${
+                      showDetails ? styles.heroScrollAreaVisible : ""
                     }`}
                   >
-                    <div className={styles.modalIcon}>{selectedEntry.icon}</div>
-                    <span className={styles.year}>{selectedEntry.year}</span>
-                    <h3 className={styles.heroTitle}>{selectedEntry.title}</h3>
-                    <p className={styles.heroSubtitle}>{selectedEntry.subtitle}</p>
+                    <div className={styles.heroInfoCard}>
+                      <div className={styles.modalIcon}>{selectedEntry.icon}</div>
+                      <span className={styles.year}>{selectedEntry.year}</span>
+                      <h3 className={styles.heroTitle}>{selectedEntry.title}</h3>
+                      <p className={styles.heroSubtitle}>{selectedEntry.subtitle}</p>
 
-                    {selectedEntry.heroStats && (
-                      <div className={styles.heroStatsGrid}>
-                        {selectedEntry.heroStats.map((s) => (
-                          <div key={s.label} className={styles.heroStatItem}>
-                            <div className={styles.heroStatIcon}>{s.icon}</div>
-                            <span className={styles.heroStatLabel}>{s.label}</span>
-                            <span className={styles.heroStatValue}>{s.value}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {selectedEntry.journeySteps && (
-                      <div className={styles.heroJourney}>
-                        <span className={styles.heroJourneyLabel}>
-                          {selectedEntry.journeyLabel ?? "MY JOURNEY"}
-                        </span>
-                        <div className={styles.heroJourneySteps}>
-                          {selectedEntry.journeySteps.map((step, i) => (
-                            <div key={i} className={styles.heroJourneyStepWrap}>
-                              <div className={styles.heroJourneyStep}>
-                                <div className={styles.heroJourneyIcon}>{step.icon}</div>
-                                <p>{step.text}</p>
-                              </div>
-                              {i < selectedEntry.journeySteps!.length - 1 && (
-                                <div className={styles.heroJourneyConnector} />
-                              )}
+                      {selectedEntry.heroStats && (
+                        <div className={styles.heroStatsGrid}>
+                          {selectedEntry.heroStats.map((s) => (
+                            <div key={s.label} className={styles.heroStatItem}>
+                              <div className={styles.heroStatIcon}>{s.icon}</div>
+                              <span className={styles.heroStatLabel}>{s.label}</span>
+                              <span className={styles.heroStatValue}>{s.value}</span>
                             </div>
                           ))}
                         </div>
-                      </div>
-                    )}
+                      )}
 
-                    {selectedEntry.quote && (
-                      <blockquote className={styles.heroQuote}>
-                        <span>&ldquo;{selectedEntry.quote.text}&rdquo;</span>
-                        — {selectedEntry.quote.author}
-                      </blockquote>
-                    )}
+                      {selectedEntry.journeySteps && (
+                        <div className={styles.heroJourney}>
+                          <span className={styles.heroJourneyLabel}>
+                            {selectedEntry.journeyLabel ?? "MY JOURNEY"}
+                          </span>
+                          <div className={styles.heroJourneySteps}>
+                            {selectedEntry.journeySteps.map((step, i) => (
+                              <div key={i} className={styles.heroJourneyStepWrap}>
+                                <div className={styles.heroJourneyStep}>
+                                  <div className={styles.heroJourneyIcon}>{step.icon}</div>
+                                  <p>{step.text}</p>
+                                </div>
+                                {i < selectedEntry.journeySteps!.length - 1 && (
+                                  <div className={styles.heroJourneyConnector} />
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {selectedEntry.quote && (
+                        <blockquote className={styles.heroQuote}>
+                          <span>&ldquo;{selectedEntry.quote.text}&rdquo;</span>
+                          — {selectedEntry.quote.author}
+                        </blockquote>
+                      )}
+
+                      {/* Entries without stats/journey/quote (e.g. Typewriting) show description + inline certs here instead */}
+                      {!selectedEntry.heroStats && (
+                        <p className={styles.heroPlainDescription}>{selectedEntry.description}</p>
+                      )}
+
+                      {selectedEntry.marksheets && selectedEntry.marksheets.length > 0 && (
+                        <div className={styles.modalMarksheet}>
+                          <span className={styles.modalMarksheetLabel}>Certificates</span>
+                          <div className={styles.modalMarksheetGrid}>
+                            {selectedEntry.marksheets.map((m) => (
+                              <div key={m.src} className={styles.modalMarksheetItem}>
+                                <img
+                                  src={m.src}
+                                  alt={m.label}
+                                  className={styles.modalMarksheetImg}
+                                  onClick={() => setLightboxSrc(m.src)}
+                                  onError={(e) => {
+                                    const target = e.currentTarget;
+                                    target.style.display = "none";
+                                    const fallback =
+                                      target.nextElementSibling as HTMLElement | null;
+                                    if (fallback) fallback.style.display = "block";
+                                  }}
+                                />
+                                <div
+                                  className={styles.modalMarksheetFallback}
+                                  style={{ display: "none" }}
+                                >
+                                  {m.label} — image not uploaded yet
+                                </div>
+                                <span className={styles.modalMarksheetItemCaption}>
+                                  {m.label}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   {selectedEntry.marksheet && (
                     <div
                       className={`${styles.heroMarksheetCard} ${
-                        selectedEntry.transparentHero ? styles.heroCardTransparent : ""
+                        showDetails ? styles.heroMarksheetCardVisible : ""
                       }`}
                     >
                       <span className={styles.heroMarksheetLabel}>Marksheet</span>
@@ -742,98 +820,8 @@ export default function About() {
               </div>
             )}
 
-            {/* ============ VIDEO VARIANT — Typewriting, full-screen ============ */}
-            {isVideo && (
-              <div className={styles.heroModalOverlay} onClick={closeModal}>
-                <div
-                  className={styles.videoHeroPanel}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <video
-                    ref={videoRef}
-                    className={styles.videoBgFull}
-                    src={selectedEntry.video}
-                    autoPlay
-                    loop
-                    muted={videoMuted}
-                    playsInline
-                  />
-                  <div className={styles.heroDimOverlay} aria-hidden="true" />
-
-                  <button
-                    type="button"
-                    className={styles.backBtn}
-                    onClick={closeModal}
-                    aria-label="Back to timeline"
-                  >
-                    <FaArrowLeft /> <span>Back</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    className={styles.muteToggleFull}
-                    onClick={() => setVideoMuted((m) => !m)}
-                    aria-label={videoMuted ? "Unmute video" : "Mute video"}
-                  >
-                    {videoMuted ? <FaVolumeMute /> : <FaVolumeUp />}
-                  </button>
-
-                  <button
-                    type="button"
-                    className={styles.modalClose}
-                    onClick={closeModal}
-                    aria-label="Close"
-                  >
-                    <FaTimes />
-                  </button>
-
-                  <div className={styles.heroInfoCard}>
-                    <div className={styles.modalIcon}>{selectedEntry.icon}</div>
-                    <span className={styles.year}>{selectedEntry.year}</span>
-                    <h3 className={styles.heroTitle}>{selectedEntry.title}</h3>
-                    <p className={styles.heroSubtitle}>{selectedEntry.subtitle}</p>
-                    <p className={styles.videoDescription}>{selectedEntry.description}</p>
-
-                    {selectedEntry.marksheets && selectedEntry.marksheets.length > 0 && (
-                      <div className={styles.modalMarksheet}>
-                        <span className={styles.modalMarksheetLabel}>Certificates</span>
-                        <div className={styles.modalMarksheetGrid}>
-                          {selectedEntry.marksheets.map((m) => (
-                            <div key={m.src} className={styles.modalMarksheetItem}>
-                              <img
-                                src={m.src}
-                                alt={m.label}
-                                className={styles.modalMarksheetImg}
-                                onClick={() => setLightboxSrc(m.src)}
-                                onError={(e) => {
-                                  const target = e.currentTarget;
-                                  target.style.display = "none";
-                                  const fallback =
-                                    target.nextElementSibling as HTMLElement | null;
-                                  if (fallback) fallback.style.display = "block";
-                                }}
-                              />
-                              <div
-                                className={styles.modalMarksheetFallback}
-                                style={{ display: "none" }}
-                              >
-                                {m.label} — image not uploaded yet
-                              </div>
-                              <span className={styles.modalMarksheetItemCaption}>
-                                {m.label}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-
             {/* ============ COMPACT VARIANT — internship, project ============ */}
-            {!isHero && !isVideo && (
+            {!hasMedia && (
               <div className={styles.modalOverlay} onClick={closeModal}>
                 <div className={styles.modalPanel} onClick={(e) => e.stopPropagation()}>
                   <button
@@ -859,27 +847,6 @@ export default function About() {
                   <h3 className={styles.modalTitle}>{selectedEntry.title}</h3>
                   <p className={styles.modalSubtitle}>{selectedEntry.subtitle}</p>
                   <p className={styles.modalDescription}>{selectedEntry.description}</p>
-
-                  {selectedEntry.marksheet && (
-                    <div className={styles.modalMarksheet}>
-                      <span className={styles.modalMarksheetLabel}>Marksheet</span>
-                      <img
-                        src={selectedEntry.marksheet}
-                        alt={`${selectedEntry.title} marksheet`}
-                        className={styles.modalMarksheetImg}
-                        onClick={() => setLightboxSrc(selectedEntry.marksheet!)}
-                        onError={(e) => {
-                          const target = e.currentTarget;
-                          target.style.display = "none";
-                          const fallback = target.nextElementSibling as HTMLElement | null;
-                          if (fallback) fallback.style.display = "block";
-                        }}
-                      />
-                      <div className={styles.modalMarksheetFallback} style={{ display: "none" }}>
-                        Marksheet image not uploaded yet
-                      </div>
-                    </div>
-                  )}
                 </div>
               </div>
             )}
