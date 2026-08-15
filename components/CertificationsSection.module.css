@@ -869,3 +869,131 @@
   font-size: 0.75rem;
   color: #5c5f6a;
 }
+/* ---------- Featured mode ---------- */
+
+.featuredLabel {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #ffb27a;
+  margin-bottom: 1.6rem;
+}
+
+.featuredLabelDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff8a3d;
+  box-shadow: 0 0 10px rgba(255, 138, 61, 0.8);
+  animation: pulseDot 1.8s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.4); }
+}
+
+/* Featured cards get a slightly larger, more dramatic treatment */
+.featuredCard {
+  border-color: rgba(255, 122, 0, 0.4);
+  box-shadow: 0 24px 70px rgba(255, 122, 0, 0.22);
+}
+
+.featuredCard::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 24px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255, 138, 61, 0.6), transparent 40%, rgba(255, 138, 61, 0.3));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.featuredRibbon {
+  position: absolute;
+  top: 14px;
+  left: -6px;
+  z-index: 4;
+  padding: 0.3rem 0.8rem 0.3rem 1rem;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #050505;
+  background: linear-gradient(90deg, #ffb27a, #ff8a3d);
+  border-radius: 0 999px 999px 0;
+  box-shadow: 0 6px 20px rgba(255, 122, 0, 0.4);
+}
+
+/* Grid transition: featured (3 cards) <-> full grid (all cards) */
+.grid {
+  transition: grid-template-columns 0.4s ease;
+}
+
+.gridAll .certCard:not(.featuredCard) {
+  animation: cardPopIn 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@keyframes cardPopIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ---------- View All / Show Featured toggle button ---------- */
+
+.toggleAllBtn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 1rem 1.8rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 122, 0, 0.4);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+  margin-bottom: 1.5rem;
+}
+
+.toggleAllBtn:hover {
+  background: rgba(255, 122, 0, 0.14);
+  border-color: rgba(255, 122, 0, 0.7);
+  transform: translateY(-2px);
+}
+
+.toggleAllCount {
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(255, 138, 61, 0.18);
+  color: #ffb27a;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.toggleAllArrow {
+  display: inline-block;
+  transition: transform 0.25s ease;
+}
+
+.toggleAllBtn:hover .toggleAllArrow {
+  transform: translateY(3px);
+}
+
+.footerRow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}

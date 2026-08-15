@@ -6,12 +6,15 @@ import { CERTIFICATIONS } from "@/lib/data";
 import CountUp from "@/components/CountUp";
 import styles from "./CertificationsSection.module.css";
 
+const FEATURED_COUNT = 3;
+
 export default function CertificationsSection() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [cardsVisible, setCardsVisible] = useState(false);
   const [closing, setClosing] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [showAll, setShowAll] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
   const spotlightRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
@@ -21,6 +24,20 @@ export default function CertificationsSection() {
   const total = CERTIFICATIONS.length;
   const totalSkills = new Set(CERTIFICATIONS.flatMap((c) => c.skills)).size;
   const selected = selectedIndex !== null ? CERTIFICATIONS[selectedIndex] : null;
+
+  // Prefer an explicit `featured` flag on each cert if present; otherwise
+  // fall back to array order (first N = featured). This means you can either
+  // reorder CERTIFICATIONS in data.ts, or tag entries with `featured: true`.
+  const hasFeaturedFlags = CERTIFICATIONS.some((c: any) => c.featured);
+  const orderedCerts = hasFeaturedFlags
+    ? [
+        ...CERTIFICATIONS.filter((c: any) => c.featured),
+        ...CERTIFICATIONS.filter((c: any) => !c.featured),
+      ]
+    : CERTIFICATIONS;
+
+  const visibleCerts = showAll ? orderedCerts : orderedCerts.slice(0, FEATURED_COUNT);
+  const hiddenCount = total - FEATURED_COUNT;
 
   // Needed so createPortal only runs client-side (document isn't available during SSR)
   useEffect(() => {
@@ -143,6 +160,17 @@ export default function CertificationsSection() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedIndex]);
 
+  const handleToggleAll = () => {
+    if (showAll) {
+      // Collapsing — scroll the grid back into view first so the section
+      // doesn't jump awkwardly once the extra cards disappear
+      gridRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      setTimeout(() => setShowAll(false), 300);
+    } else {
+      setShowAll(true);
+    }
+  };
+
   const modalNode = selected && (
     <div
       className={`${styles.modalOverlay} ${closing ? styles.modalClosing : ""}`}
@@ -188,8 +216,7 @@ export default function CertificationsSection() {
 
           <div className={styles.modalActions}>
             
-            <a
-              href={selected.image}
+            <a  href={selected.image}
               download={`${selected.title.replace(/\s+/g, "-")}.jpg`}
               className={styles.downloadBtn}
             >
@@ -197,8 +224,7 @@ export default function CertificationsSection() {
             </a>
             {selected.credentialUrl && (
               
-              <a
-                href={selected.credentialUrl}
+              <a  href={selected.credentialUrl}
                 target="_blank"
                 rel="noreferrer"
                 className={styles.verifyBtn}
@@ -287,25 +313,45 @@ export default function CertificationsSection() {
         </div>
       </div>
 
-      <div className={styles.grid} ref={gridRef}>
-        {CERTIFICATIONS.map((cert, i) => {
+      {!showAll && (
+        <div className={styles.featuredLabel}>
+          <span className={styles.featuredLabelDot} />
+          Featured Highlights
+        </div>
+      )}
+
+      <div
+        className={`${styles.grid} ${showAll ? styles.gridAll : ""}`}
+        ref={gridRef}
+      >
+        {visibleCerts.map((cert, i) => {
           const isExpanded = hoveredIndex === i;
           const isDimmed = hoveredIndex !== null && hoveredIndex !== i;
+          const isFeatured = !showAll;
+          // Find the real index in CERTIFICATIONS for modal navigation
+          const realIndex = CERTIFICATIONS.indexOf(cert);
           return (
             <div
               key={cert.title}
               className={`${styles.certCard} ${isExpanded ? styles.expanded : ""} ${
                 isDimmed ? styles.dimmed : ""
-              } ${cardsVisible ? styles.cardVisible : ""}`}
+              } ${cardsVisible ? styles.cardVisible : ""} ${
+                isFeatured ? styles.featuredCard : ""
+              }`}
               style={{ transitionDelay: cardsVisible ? `${i * 0.06}s` : "0s" }}
               onMouseEnter={() => setHoveredIndex(i)}
               onMouseLeave={() => setHoveredIndex(null)}
-              onClick={() => setSelectedIndex(i)}
+              onClick={() => setSelectedIndex(realIndex)}
               role="button"
               tabIndex={0}
               aria-label={`Open full certificate: ${cert.title}`}
             >
               <span className={styles.cardGlow} aria-hidden="true" />
+              {isFeatured && (
+                <span className={styles.featuredRibbon}>
+                  {i === 0 ? "★ Top Pick" : "Highlight"}
+                </span>
+              )}
 
               <div className={styles.cardTop}>
                 <div className={styles.logoCircle}>{cert.issuer.charAt(0)}</div>
@@ -337,7 +383,7 @@ export default function CertificationsSection() {
                   className={styles.viewFullBtn}
                   onClick={(e) => {
                     e.stopPropagation();
-                    setSelectedIndex(i);
+                    setSelectedIndex(realIndex);
                   }}
                 >
                   View Full Certificate →
@@ -349,8 +395,20 @@ export default function CertificationsSection() {
       </div>
 
       <div className={styles.footerRow}>
+        <button type="button" className={styles.toggleAllBtn} onClick={handleToggleAll}>
+          {showAll ? (
+            <>↑ Show Featured Only</>
+          ) : (
+            <>
+              View All Certifications
+              <span className={styles.toggleAllCount}>+{hiddenCount} more</span>
+              <span className={styles.toggleAllArrow}>↓</span>
+            </>
+          )}
+        </button>
+
         <a href="#certifications" ref={ctaRef} className={styles.ctaBtn}>
-          View All Certifications →
+          Explore My Journey →
         </a>
       </div>
 
