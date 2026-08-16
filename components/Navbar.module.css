@@ -116,3 +116,12 @@
     justify-content: center;
   }
 }
+.githubLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.githubLink svg {
+  font-size: 0.95em;
+}

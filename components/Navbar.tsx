@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { SiGithub } from "react-icons/si";
 import styles from "./Navbar.module.css";
 
 const SECTIONS = [
@@ -7,7 +8,6 @@ const SECTIONS = [
   { id: "about", href: "#about", label: "ABOUT" },
   { id: "projects", href: "#projects", label: "PROJECTS" },
   { id: "certifications", href: "#certifications", label: "CERTIFICATIONS" },
-  { id: "contact", href: "#contact", label: "CONTACT" },
 ];
 
 export default function Navbar() {
@@ -66,9 +66,10 @@ export default function Navbar() {
 
   // Scroll-spy: which section is currently active
   useEffect(() => {
-    const elements = SECTIONS.map((s) => document.getElementById(s.id)).filter(
-      (el): el is HTMLElement => !!el
-    );
+    const allIds = [...SECTIONS.map((s) => s.id), "contact"];
+    const elements = allIds
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => !!el);
     if (elements.length === 0) return;
 
     const observer = new IntersectionObserver(
@@ -131,8 +132,8 @@ export default function Navbar() {
       </div>
       <nav className={styles.navLinks} ref={navLinksRef}>
         {SECTIONS.map((section) => (
-          <a
-            key={section.id}
+          
+          <a  key={section.id}
             href={section.href}
             ref={(el) => {
               linkRefs.current[section.id] = el;
@@ -143,13 +144,36 @@ export default function Navbar() {
             {section.label}
           </a>
         ))}
-        <a
-          href="/leetcode"
+        
+        <a  href="/leetcode"
           ref={(el) => {
             linkRefs.current["leetcode"] = el;
           }}
         >
           LEETCODE
+        </a>
+        
+        <a  href="https://github.com/rnithish18"
+          target="_blank"
+          rel="noopener noreferrer"
+          ref={(el) => {
+            linkRefs.current["github"] = el;
+          }}
+          className={styles.githubLink}
+          aria-label="GitHub"
+        >
+          <SiGithub />
+          <span>GITHUB</span>
+        </a>
+        
+        <a
+          href="#contact"
+          ref={(el) => {
+            linkRefs.current["contact"] = el;
+          }}
+          className={activeId === "contact" ? styles.activeLink : ""}
+        >
+          CONTACT
         </a>
         <span
           className={styles.underline}

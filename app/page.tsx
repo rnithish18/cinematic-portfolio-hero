@@ -4,6 +4,7 @@ import ScrollTransition from "@/components/ScrollTransition";
 import About from "@/components/About";
 import ProjectsShowcase from "@/components/ProjectsShowcase";
 import CertificationsSection from "@/components/CertificationsSection";
+import GitHubSection from "@/components/GitHubSection";
 import LeetCodeSection from "@/components/LeetCodeSection";
 import Contact from "@/components/Contact";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -27,6 +28,10 @@ export default function Home() {
 
       <ScrollReveal direction="up">
         <CertificationsSection />
+      </ScrollReveal>
+
+      <ScrollReveal direction="up">
+        <GitHubSection />
       </ScrollReveal>
 
       <ScrollReveal direction="up">

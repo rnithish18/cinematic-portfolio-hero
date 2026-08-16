@@ -1,0 +1,258 @@
+.githubSection {
+  position: relative;
+  background: #090a0d;
+  padding: 100px 5%;
+  overflow: hidden;
+}
+
+.bgGlow {
+  position: absolute;
+  top: -10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 400px;
+  background: radial-gradient(ellipse, rgba(224, 122, 63, 0.12) 0%, transparent 70%);
+  filter: blur(30px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.header {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  margin: 0 auto 56px;
+  text-align: center;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: #e07a3f;
+  margin-bottom: 12px;
+}
+
+.heading {
+  font-size: clamp(1.9rem, 3.5vw, 2.75rem);
+  font-weight: 800;
+  color: #f2f2f2;
+  margin: 0 0 12px;
+}
+
+.headingAccent {
+  background: linear-gradient(90deg, #e07a3f, #a855f7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  color: #9a9a9a;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.statusMessage {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: #9a9a9a;
+  font-size: 0.95rem;
+  padding: 40px 0;
+}
+
+.statusMessage a {
+  color: #ffb066;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.statusMessage a:hover {
+  text-decoration: underline;
+}
+
+.statsRow {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  max-width: 700px;
+  margin: 0 auto 40px;
+}
+
+.statCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 20px 28px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  min-width: 130px;
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+
+.statCard:hover {
+  border-color: rgba(224, 122, 63, 0.4);
+  transform: translateY(-3px);
+}
+
+.statIcon {
+  font-size: 1.1rem;
+  color: #ffb066;
+}
+
+.statNumber {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #f2f2f2;
+}
+
+.statLabel {
+  font-size: 0.72rem;
+  color: #999;
+  letter-spacing: 0.04em;
+}
+
+.contributionWrap {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto 48px;
+}
+
+.repoGrid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.repoCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 22px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-decoration: none;
+  transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.repoCard:hover {
+  border-color: rgba(224, 122, 63, 0.45);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(224, 122, 63, 0.12);
+}
+
+.repoTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.repoName {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f2f2f2;
+  font-family: monospace;
+}
+
+.repoLinkIcon {
+  font-size: 0.75rem;
+  color: #777;
+  flex-shrink: 0;
+}
+
+.repoDescription {
+  font-size: 0.85rem;
+  color: #9a9a9a;
+  line-height: 1.5;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.6em;
+}
+
+.repoMeta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+
+.repoLanguage {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: #ccc;
+}
+
+.langDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.repoStat {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  color: #999;
+}
+
+.footerRow {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  margin-top: 56px;
+}
+
+.ctaBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #e07a3f, #a855f7);
+  color: #050505;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ctaBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(224, 122, 63, 0.3);
+}
+
+@media (max-width: 700px) {
+  .statsRow {
+    gap: 12px;
+  }
+  .statCard {
+    min-width: 100px;
+    padding: 16px 18px;
+  }
+  .repoGrid {
+    grid-template-columns: 1fr;
+  }
+}

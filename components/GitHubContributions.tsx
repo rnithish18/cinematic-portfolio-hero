@@ -24,19 +24,34 @@ export default function GitHubContributions() {
   const [hovered, setHovered] = useState<ContributionDay | null>(null);
 
   useEffect(() => {
+    let cancelled = false;
+
     fetch("/api/github-contributions")
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch");
         return res.json();
       })
-      .then(setData)
-      .catch(() => setError(true));
+      .then((json) => {
+        if (cancelled) return;
+        if (json.error) {
+          setError(true);
+          return;
+        }
+        setData(json);
+      })
+      .catch(() => {
+        if (!cancelled) setError(true);
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   if (error) {
     return (
       <div className={styles.card}>
-        <p className={styles.errorText}>Couldn't load GitHub activity.</p>
+        <p className={styles.errorText}>Couldn&apos;t load GitHub activity.</p>
       </div>
     );
   }
@@ -67,9 +82,7 @@ export default function GitHubContributions() {
                 className={styles.day}
                 style={{
                   backgroundColor:
-                    day.contributionCount === 0
-                      ? "rgba(255,255,255,0.06)"
-                      : day.color,
+                    day.contributionCount === 0 ? "rgba(255,255,255,0.06)" : day.color,
                 }}
                 onMouseEnter={() => setHovered(day)}
                 onMouseLeave={() => setHovered(null)}
